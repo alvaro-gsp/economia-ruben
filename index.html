@@ -3,432 +3,2331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Economía - Temas 2 y 3</title>
+<title>Economía - Temas 1, 2 y 3</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Economía">
+<meta name="theme-color" content="#222">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #fff;
-    color: #222;
-    line-height: 1.45;
-    padding: 1.5rem;
-    max-width: 780px;
+    background: #fafafa;
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: 0 1.5rem 2rem;
+    padding-top: 3.2rem;
+    max-width: 800px;
     margin: 0 auto;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    transition: background 0.3s, color 0.3s;
   }
-  h1 { font-size: 1.35rem; margin-bottom: 0.15rem; }
+
+  /* Sticky top bar */
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.4rem 1rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .top-bar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #444;
+    transition: all 0.15s;
+  }
+  .top-bar-btn:hover { border-color: #888; background: #eee; }
+  .top-bar-btn svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+  .top-bar-btn.exam { color: #1565c0; border-color: #1565c0; }
+  .top-bar-btn.exam:hover { background: #e3f2fd; }
+  .top-bar-btn.tema { color: #555; border-color: #999; font-size: 0.7rem; padding: 0.3rem 0.5rem; min-width: 1.8rem; justify-content: center; }
+  .top-bar-btn.tema:hover { background: #e8e8e8; border-color: #666; }
+
+  /* Back to top */
+  .btn-top {
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    z-index: 100;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+  }
+  .btn-top:hover { border-color: #888; background: #f0f0f0; }
+  .btn-top svg { width: 16px; height: 16px; fill: #555; }
+  .btn-top.visible { display: flex; }
+
+  .page-ref { font-size: 0.65em; color: #999; font-weight: 400; margin-left: 0.3em; }
+
+  .flow-svg { max-width: 460px; display: block; margin: 0.8rem auto; }
+  .study-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.5rem 0; }
+  .study-table th { background: #333; color: #fff; padding: 0.35rem 0.5rem; text-align: left; font-weight: 600; }
+  .study-table td { padding: 0.3rem 0.5rem; border-bottom: 1px solid #ddd; vertical-align: top; }
+  .study-table tr:last-child td { border-bottom: none; }
+  .study-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  body.dark .study-table th { background: #444; color: #eee; }
+  body.dark .study-table td { border-color: #555; }
+  @media (max-width: 600px) {
+    body { font-size: 0.85rem; padding: 0.5rem; }
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1rem; }
+    .card-body { padding: 0.6rem; }
+    .study-table { font-size: 0.75rem; }
+    .study-table td:first-child { white-space: normal; }
+    .study-table th, .study-table td { padding: 0.25rem 0.35rem; }
+    .top-bar { gap: 0.3rem; padding: 0.4rem; }
+    .top-bar-btn { font-size: 0.65rem; padding: 0.25rem 0.4rem; }
+  }
+  body.dark .page-ref { color: #777; }
+  @media print { .page-ref { display: none; } }
+  h1 {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 0.2rem;
+    color: #111;
+    letter-spacing: -0.01em;
+  }
   h2 {
-    font-size: 1.1rem;
-    color: #555;
-    border-bottom: 2px solid #222;
-    padding-bottom: 0.2rem;
+    font-size: 1.05rem;
+    color: #888;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin: 0 0 1rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: default;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .card-header h3 {
+    font-size: 0.9rem;
+    background: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    color: #333;
+    flex: 1;
+    transition: color 0.3s;
+  }
+  .card-speak {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    transition: all 0.15s;
+  }
+  .card-speak:hover { border-color: #1976d2; background: #e3f2fd; }
+  .card-speak.speaking { border-color: #d32f2f; background: #ffebee; }
+  .card-speak svg { width: 13px; height: 13px; fill: #666; }
+  .card-speak:hover svg { fill: #1976d2; }
+  .card-speak.speaking svg { fill: #d32f2f; }
+  .card-body {
+    padding: 0.8rem 1rem 0.9rem;
+  }
+  .card-body section {
     margin-bottom: 0.6rem;
   }
-  h3 {
-    font-size: 0.95rem;
-    background: #e8e8e8;
-    margin: 0.8rem 0 0.4rem 0;
-    padding: 0.25rem 0.7rem;
-    border-radius: 4px;
-  }
-  section { margin-bottom: 0.6rem; }
-  section > p { margin-bottom: 0.25rem; }
-  ul, ol { margin: 0.15rem 0 0.4rem 1.3rem; }
-  li { margin-bottom: 0.1rem; }
+  .card-body section:last-child { margin-bottom: 0; }
+  .card-body section > p { margin-bottom: 0.4rem; }
+  .card-body ul, .card-body ol { margin: 0.3rem 0 0.5rem 1.4rem; }
+  .card-body li { margin-bottom: 0.25rem; line-height: 1.55; }
+  .card-body li li { margin-bottom: 0.15rem; }
+  .card-body strong { color: #111; }
+
+  /* Aviso & vocab inside cards */
   .aviso {
     background: #fff8e1;
     border-left: 3px solid #f9a825;
-    padding: 0.4rem 0.7rem;
-    margin: 0.4rem 0;
-    border-radius: 4px;
+    padding: 0.5rem 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    transition: background 0.3s;
   }
-  .aviso-titulo { font-weight: 700; margin-bottom: 0.15rem; }
-  .vocab-titulo { font-weight: 700; margin-bottom: 0.15rem; }
+  .aviso-titulo { font-weight: 700; margin-bottom: 0.2rem; }
+  .vocab-titulo { font-weight: 700; margin-bottom: 0.2rem; }
   .vocab {
     background: #e3f2fd;
     border-left: 3px solid #1976d2;
-    padding: 0.35rem 0.7rem;
-    margin: 0.4rem 0;
-    border-radius: 4px;
-    font-size: 0.88rem;
+    padding: 0.45rem 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    font-size: 0.82rem;
+    transition: background 0.3s;
   }
-  .vocab p { margin-bottom: 0.15rem; }
+  .vocab p { margin-bottom: 0.2rem; }
   .vocab p:last-child { margin-bottom: 0; }
-  .btn-pdf {
-    display: inline-block;
-    background: #222;
-    color: #fff;
-    padding: 0.4rem 1rem;
+
+  /* Formulas centered */
+  .formula {
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    padding: 0.4rem;
+    background: #f8f8f8;
+    border-radius: 5px;
+    border: 1px dashed #ddd;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  /* Dark mode */
+  body.dark { background: #1a1a1a; color: #ddd; }
+  body.dark .top-bar { background: #252525; border-color: #444; }
+  body.dark .top-bar-btn { background: #333; border-color: #555; color: #ccc; }
+  body.dark .top-bar-btn:hover { background: #444; border-color: #888; }
+  body.dark .top-bar-btn.exam { color: #64b5f6; border-color: #64b5f6; }
+  body.dark .top-bar-btn.tema { color: #aaa; border-color: #666; }
+  body.dark .top-bar-btn.tema:hover { background: #444; border-color: #888; }
+  body.dark .btn-top { background: #333; border-color: #555; }
+  body.dark .btn-top svg { fill: #ccc; }
+  body.dark h1 { color: #eee; }
+  body.dark h2 { color: #777; }
+  body.dark .card { background: #242424; border-color: #383838; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  body.dark .card-header { background: #2a2a2a; border-color: #383838; }
+  body.dark .card-header h3 { color: #ddd; }
+  body.dark .card-body strong { color: #fff; }
+  body.dark .card-speak { background: #333; border-color: #555; }
+  body.dark .card-speak svg { fill: #aaa; }
+  body.dark .card-speak:hover { background: #1a3a5c; border-color: #42a5f5; }
+  body.dark .card-speak:hover svg { fill: #64b5f6; }
+  body.dark .aviso { background: #3a2e00; border-color: #f9a825; }
+  body.dark .vocab { background: #0d2137; border-color: #42a5f5; }
+  body.dark .formula { background: #2a2a2a; border-color: #444; }
+
+  /* Exam mode */
+  #examView { display: none; }
+  #examView.active { display: block; }
+  #studyContent.hidden { display: none; }
+
+  .exam-topic-selector { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+  .exam-topic-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 2px solid #222;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.15s;
+  }
+  .exam-topic-btn:hover { background: #f0f0f0; }
+  .exam-topic-btn.active { background: #222; color: #fff; }
+  .exam-btn-go {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    background: #1565c0;
+    color: #fff;
     cursor: pointer;
     font-size: 0.85rem;
-    margin-bottom: 0.8rem;
+    font-weight: 700;
+    transition: all 0.15s;
+    margin-left: 0.3rem;
   }
-  .btn-pdf:hover { background: #444; }
+  .exam-btn-go:hover { background: #1976d2; }
+  .exam-btn-go svg { width: 16px; height: 16px; fill: #fff; }
+  .exam-btn {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .exam-btn-start { background: #222; color: #fff; }
+  .exam-btn-start:hover { background: #444; }
+
+  .exam-session { display: none; }
+  .exam-session.active { display: block; }
+
+  .ex-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .ex-score-live { font-size: 0.8rem; font-weight: 700; display: flex; gap: 0.6rem; }
+  .ex-score-live span { font-size: 0.85rem; }
+  .ex-progress-bar { height: 6px; background: #e0e0e0; border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
+  .ex-progress-fill { height: 100%; background: #222; border-radius: 3px; transition: width 0.4s ease; }
+  .ex-progress-text { font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; }
+
+  .ex-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 0.8rem;
+    justify-content: flex-end;
+  }
+  .ex-toolbar-sep { width: 1px; height: 20px; background: #ddd; margin: 0 0.15rem; }
+  .ex-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.25rem 0.45rem;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #555;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .ex-icon-btn:hover { border-color: #888; background: #f0f0f0; }
+  .ex-icon-btn:active { background: #e0e0e0; }
+  .ex-icon-btn svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+  .ex-icon-btn.disabled { opacity: 0.25; pointer-events: none; }
+  .ex-icon-btn.muted { border-color: #d32f2f; color: #d32f2f; }
+  .ex-icon-btn.muted:hover { background: #ffebee; }
+  .ex-icon-btn.counting { border-color: #1976d2; color: #1976d2; background: #e3f2fd; }
+  .ex-icon-btn.counting:hover { background: #bbdefb; }
+  .ex-icon-btn.reveal { color: #1976d2; border-color: #1976d2; }
+  .ex-icon-btn.reveal:hover { background: #e3f2fd; }
+  .ex-icon-btn.home { color: #555; border-color: #aaa; }
+  .ex-icon-btn.home:hover { background: #e0e0e0; }
+  .ex-icon-btn.a-correct { color: #2e7d32; border-color: #2e7d32; }
+  .ex-icon-btn.a-correct:hover { background: #2e7d32; color: #fff; }
+  .ex-icon-btn.a-partial { color: #b78200; border-color: #f9a825; }
+  .ex-icon-btn.a-partial:hover { background: #f9a825; color: #fff; }
+  .ex-icon-btn.a-wrong { color: #d32f2f; border-color: #d32f2f; }
+  .ex-icon-btn.a-wrong:hover { background: #d32f2f; color: #fff; }
+
+  .ex-panel {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .ex-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04rem;
+  }
+  .ex-panel-header .arrow {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+    color: #999;
+  }
+  .ex-panel.collapsed .ex-panel-header .arrow { transform: rotate(-90deg); }
+  .ex-panel-body {
+    padding: 0.5rem 0.9rem 0.7rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    max-height: 600px;
+    overflow: hidden;
+  }
+  .ex-panel.collapsed .ex-panel-body {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .ex-panel-body ul { margin: 0.3rem 0 0 1.2rem; }
+  .ex-panel-body li { margin-bottom: 0.2rem; }
+
+  .ex-panel-q { border-left: 4px solid #42a5f5; }
+  .ex-panel-q .ex-panel-header { color: #1565c0; background: #e3f2fd; }
+  .ex-panel-a { border-left: 4px solid #2e7d32; }
+  .ex-panel-a .ex-panel-header { color: #2e7d32; background: #f5fdf5; }
+
+  .ex-section-label { font-size: 0.8rem; color: #999; margin-bottom: 0.3rem; }
+
+  .ex-results { display: none; }
+  .ex-results.active { display: block; }
+  .ex-results h2 { font-size: 1.15rem; margin-bottom: 0.8rem; }
+  .ex-score-bar-container { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+  .ex-score-label { font-size: 0.8rem; font-weight: 600; min-width: 4.5rem; }
+  .ex-score-bar { flex: 1; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; }
+  .ex-score-bar-fill { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+  .ex-score-bar-fill.correct { background: #2e7d32; }
+  .ex-score-bar-fill.partial { background: #f9a825; }
+  .ex-score-bar-fill.wrong { background: #d32f2f; }
+  .ex-score-pct { font-size: 0.8rem; font-weight: 700; min-width: 2.5rem; text-align: right; }
+  .ex-results-section { margin-top: 1.2rem; }
+  .ex-results-section h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .ex-review-list { list-style: none; padding: 0; }
+  .ex-review-item { padding: 0.5rem 0.7rem; margin-bottom: 0.4rem; border-radius: 6px; font-size: 0.85rem; line-height: 1.45; }
+  .ex-review-item.wrong { background: #ffebee; border-left: 3px solid #d32f2f; }
+  .ex-review-item.partial { background: #fff8e1; border-left: 3px solid #f9a825; }
+  .ex-review-item-section { font-size: 0.75rem; color: #888; }
+  .ex-review-item-q { font-weight: 600; margin: 0.15rem 0; }
+  .ex-review-item-a { color: #555; }
+  .ex-results-actions { margin-top: 1.2rem; display: flex; gap: 0.5rem; }
+
+  .ex-warning { background: #fff8e1; border-left: 3px solid #f9a825; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border-radius: 4px; font-size: 0.85rem; display: none; }
+  .ex-warning.active { display: block; }
+
+  /* Dark mode — exam panels */
+  body.dark .ex-panel { border-color: #444; }
+  body.dark .ex-panel-q { border-left-color: #42a5f5; }
+  body.dark .ex-panel-q .ex-panel-header { background: #0d2137; color: #64b5f6; }
+  body.dark .ex-panel-a { border-left-color: #4caf50; }
+  body.dark .ex-panel-a .ex-panel-header { background: #0d2a0d; color: #66bb6a; }
+  body.dark .ex-panel-body { color: #ddd; }
+  body.dark .ex-icon-btn { background: #333; border-color: #555; color: #ccc; }
+  body.dark .ex-icon-btn:hover { background: #444; }
+  body.dark .exam-topic-btn { border-color: #888; color: #ccc; background: #333; }
+  body.dark .exam-topic-btn.active { background: #ddd; color: #111; }
+  body.dark .ex-section-label { color: #777; }
+  body.dark .ex-review-item.wrong { background: #3a1010; }
+  body.dark .ex-review-item.partial { background: #3a2e00; }
+  body.dark .ex-review-item-a { color: #aaa; }
+
   @media print {
-    .btn-pdf { display: none; }
-    body { padding: 0; font-size: 0.8rem; line-height: 1.35; }
-    h1 { font-size: 1.1rem; }
-    h2 { font-size: 0.95rem; margin-bottom: 0.3rem; }
-    h3 { font-size: 0.85rem; margin: 0.4rem 0 0.2rem 0; padding: 0.15rem 0.5rem; }
-    section { margin-bottom: 0.3rem; }
-    ul, ol { margin: 0.1rem 0 0.2rem 1.1rem; }
-    li { margin-bottom: 0.05rem; }
-    .aviso, .vocab { padding: 0.2rem 0.5rem; margin: 0.2rem 0; }
+    .top-bar, .btn-top, #examView, .card-speak { display: none !important; }
+    body, body.dark { padding: 0.3rem; padding-top: 0; font-size: 0.8rem; line-height: 1.4; background: #fff !important; color: #000 !important; max-width: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body.dark h1, body.dark h2, body.dark h3, body.dark strong, body.dark .card-body, body.dark p, body.dark li { color: #000 !important; }
+    h2 { color: #000 !important; }
+    body.dark .card { background: #fff !important; border-color: #ccc !important; }
+    body.dark .card-header { background: #f0f0f0 !important; border-color: #ddd !important; }
+    body.dark .card-header h3 { color: #000 !important; }
+    body.dark .aviso { background: #fff8e1 !important; }
+    body.dark .vocab { background: #e3f2fd !important; }
+    body.dark .formula { background: #f5f5f5 !important; border-color: #ccc !important; }
+    h1 { font-size: 1.1rem; margin: 0.4rem 0 0.1rem; letter-spacing: 0; }
+    h2 { font-size: 0.8rem; margin: 0 0 0.3rem; }
+    .card { border: 1px solid #ccc; box-shadow: none; margin-bottom: 0.4rem; border-radius: 6px; page-break-inside: auto; }
+    .card-header { page-break-after: avoid; }
+    .study-table tr { page-break-inside: avoid; }
+    .card-header { padding: 0.25rem 0.5rem; background: #f0f0f0; border-bottom: 1px solid #ddd; }
+    .card-header h3 { font-size: 0.8rem; color: #000; }
+    .card-body { padding: 0.3rem 0.5rem 0.4rem; }
+    .card-body section { margin-bottom: 0.25rem; }
+    .card-body section > p { margin-bottom: 0.15rem; }
+    .card-body ul, .card-body ol { margin: 0.1rem 0 0.2rem 1.1rem; }
+    .card-body li { margin-bottom: 0.08rem; line-height: 1.35; }
+    .formula { padding: 0.15rem 0.3rem; margin: 0.2rem 0; background: #f5f5f5; border: 1px dashed #ccc; }
+    .aviso, .vocab { padding: 0.25rem 0.5rem; margin: 0.2rem 0; }
   }
 </style>
 </head>
 <body>
 
-<button class="btn-pdf" onclick="window.print()">Guardar como PDF</button>
+<nav class="top-bar" id="topBar">
+  <button class="top-bar-btn" onclick="window.print()" title="Imprimir">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Imprimir
+  </button>
+  <button class="top-bar-btn exam" id="btnExamMode" title="Examen">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+    Examen
+  </button>
+  <button class="top-bar-btn tema" onclick="document.getElementById('tema1').scrollIntoView({behavior:'smooth'})" title="Ir a Tema 1">T1</button>
+  <button class="top-bar-btn tema" onclick="document.getElementById('tema2').scrollIntoView({behavior:'smooth'})" title="Ir a Tema 2">T2</button>
+  <button class="top-bar-btn tema" onclick="document.getElementById('tema3').scrollIntoView({behavior:'smooth'})" title="Ir a Tema 3">T3</button>
+  <button class="top-bar-btn" id="btnThemeToggle" title="Cambiar tema">
+    <svg viewBox="0 0 24 24" id="themeIcon"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+  </button>
+</nav>
 
-<h1>Tema 2. Modelo de negocio: organización y relaciones laborales</h1>
+<button class="btn-top" id="btnTop" title="Ir arriba">
+  <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+</button>
+
+<div id="studyContent">
+<h1 id="tema1">Tema 1. La empresa del siglo XXI</h1>
+<h2>El empresario y la empresa</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Introducción <span class="page-ref">(pp. 17-18)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Una <strong>empresa</strong> es una unidad de organización dedicada a actividades industriales, mercantiles o de prestación de servicios con <strong>fines lucrativos</strong>.</p>
+      <p>La empresa nace y se desarrolla con el mercado en <strong>cuatro fases</strong>:</p>
+      <ol>
+        <li><strong>Etapa mercantilista</strong> — actividad comercial, compraventa y préstamo. Los avances tecnológicos impulsan el comercio internacional, las sociedades anónimas y el espíritu emprendedor.</li>
+        <li><strong>Capitalismo industrial</strong> — la Primera Revolución Industrial (Inglaterra, s. XVIII) supone la <strong>creación de sistemas de producción a gran escala</strong>. Comienza en la industria de fábrica y, gracias al ferrocarril, pasa a la industria pesada. La Segunda Revolución Industrial (finales s. XIX) favorece el desarrollo de grandes empresas industriales y el aumento del comercio internacional e industrialización de las colonias.</li>
+        <li><strong>Capitalismo financiero</strong> — último tercio del s. XX, aparece el <strong>monopolio</strong>. Las empresas son <strong>dominadas por los bancos</strong>. Nace el grupo financiero, la internacionalización y la empresa multinacional.</li>
+        <li><strong>La empresa como sistema</strong> — la empresa es una realidad económica y social. El empresario desarrolla su <strong>función de organización y dirección</strong>.</li>
+      </ol>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Omnishopper:</strong> persona que compra en la era omnicanal, donde los procesos relacionados con la compra y las decisiones se inician a través de un canal y se terminan en otro.<br>
+      <strong>CEO:</strong> siglas de <em>chief executive officer</em>; jefe ejecutivo de una empresa, la persona con mayor responsabilidad dentro de una corporación.<br>
+      <strong>Entrepreneur:</strong> aquellas personas cuyo negocio era la compraventa de mercancías.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.1. Teorías sobre la explicación de las funciones sociales del empresariado <span class="page-ref">(pp. 17-18)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>El término «empresariado» se separó del concepto de propiedad de la empresa con <strong>Alfred Marshall</strong> en 1890.</p>
+      <p>Todo empresariado <strong>planifica, organiza, gestiona y controla</strong> su entorno empresarial, realizando unas <strong>funciones sociales</strong>:</p>
+      <ol>
+        <li><strong>Produce bienes y servicios</strong> que satisfacen las necesidades de la sociedad, añadiendo valor.</li>
+        <li><strong>Crea empleo y genera riqueza</strong>, incrementando el bienestar y la calidad de vida.</li>
+        <li><strong>Impulsa innovaciones</strong> que posibilitan el desarrollo económico.</li>
+        <li><strong>Anticipa el producto social</strong> y asume un riesgo, pagando por anticipado los factores de producción sin conocer los resultados futuros.</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.2. Perfiles de la emprendeduría <span class="page-ref">(pp. 18-19)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Cuatro <strong>perfiles emprendedores</strong>:</p>
+      <ul>
+        <li><strong>Perfil directivo</strong> — cualidad principal: saber <strong>liderar equipos</strong>.</li>
+        <li><strong>Perfil técnico</strong> — destaca por su <strong>hiperespecialización</strong>, aportando conocimientos e innovación continua.</li>
+        <li><strong>Perfil comercial</strong> — dominio en técnicas de ventas, no siente aversión al riesgo, maneja bien el <strong>trabajo en equipo y redes de contactos</strong>.</li>
+        <li><strong>Perfil visionario</strong> — habilidad para descubrir <strong>oportunidades de negocio</strong>, asume riesgos, toma decisiones rápidas e intuitivas, crea equipos de alto rendimiento y tiende a delegar.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.3. Sensibilidad y valoración de la emprendeduría social y sostenible <span class="page-ref">(p. 19)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>El <strong>emprendimiento social y sostenible</strong> es un tipo de <em>startup</em> guiado por una <strong>misión social</strong>, ubicado entre las empresas con fines de lucro y las organizaciones sin fines de lucro.</p>
+      <p>En épocas de crisis aparecen <strong>iniciativas sociales sostenibles</strong>, generadoras de renta y empleo, buscando un impacto positivo en desarrollo social, económico y ambiental.</p>
+      <p>El <strong>desarrollo sostenible</strong> se sitúa en la intersección de tres dimensiones: social, económico y medioambiental.</p>
+    </section>
+    <section>
+      <p><strong>Autonomía y tolerancia ante el error:</strong></p>
+      <p>Es complicado acertar con una idea de negocio al principio. Se aplica el <strong>principio de ensayo y error</strong>: simultanear el desarrollo de la idea con el lanzamiento al mercado.</p>
+      <svg class="flow-svg" viewBox="0 0 460 90" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#666"/></marker></defs>
+        <!-- IDEA (pill) -->
+        <rect x="30" y="28" width="58" height="26" rx="13" fill="#444"/>
+        <text x="59" y="46" text-anchor="middle" fill="#fff" style="font:bold 12px 'Segoe UI',sans-serif">IDEA</text>
+        <!-- → MUESTRA -->
+        <line x1="90" y1="41" x2="112" y2="41" stroke="#666" stroke-width="1.5" marker-end="url(#ah)"/>
+        <rect x="115" y="29" width="86" height="24" rx="3" fill="#eee" stroke="#aaa" stroke-width="1.5"/>
+        <text x="158" y="46" text-anchor="middle" fill="#444" style="font:bold 12px 'Segoe UI',sans-serif">MUESTRA</text>
+        <!-- → ¿FUNCIONA? -->
+        <line x1="203" y1="41" x2="225" y2="41" stroke="#666" stroke-width="1.5" marker-end="url(#ah)"/>
+        <rect x="228" y="27" width="108" height="28" rx="3" fill="#eee" stroke="#aaa" stroke-width="1.5"/>
+        <text x="282" y="46" text-anchor="middle" fill="#444" style="font:bold 12px 'Segoe UI',sans-serif">¿FUNCIONA?</text>
+        <!-- SÍ → Lanzar → MERCADO (arriba-derecha) -->
+        <path d="M 320 33 L 350 14" fill="none" stroke="#666" stroke-width="1.5" marker-end="url(#ah)"/>
+        <text x="330" y="18" fill="#2e7d32" style="font:bold 10px 'Segoe UI',sans-serif">SÍ</text>
+        <text x="357" y="9" fill="#666" style="font:10px 'Segoe UI',sans-serif">Lanzar</text>
+        <line x1="390" y1="10" x2="403" y2="10" stroke="#666" stroke-width="1.5" marker-end="url(#ah)"/>
+        <rect x="406" y="1" width="50" height="20" rx="3" fill="#2e7d32"/>
+        <text x="431" y="15" text-anchor="middle" fill="#fff" style="font:bold 9px 'Segoe UI',sans-serif">MERCADO</text>
+        <!-- NO (abajo-derecha) -->
+        <line x1="336" y1="50" x2="336" y2="68" stroke="#666" stroke-width="1.5"/>
+        <text x="342" y="64" fill="#c62828" style="font:bold 10px 'Segoe UI',sans-serif">NO</text>
+        <!-- Línea de retorno + Corregir centrado encima -->
+        <line x1="336" y1="70" x2="59" y2="70" stroke="#666" stroke-width="1.5"/>
+        <line x1="59" y1="70" x2="59" y2="56" stroke="#666" stroke-width="1.5" marker-end="url(#ah)"/>
+        <text x="200" y="84" text-anchor="middle" fill="#444" style="font:bold 12px 'Segoe UI',sans-serif">Corregir</text>
+      </svg>
+      <p>Ser flexible, encontrar lo que funciona primero a <strong>pequeña escala</strong> e ir a más.</p>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Startup:</strong> empresa de nueva creación o edad temprana con grandes posibilidades de crecimiento, que comercializa productos y servicios a través de las TIC.
+    </div>
+  </div>
+</div>
+
+<h2>La empresa</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.1. La empresa: concepto, elementos, funciones y objetivos <span class="page-ref">(p. 20)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La empresa es una <strong>unidad de organización</strong> dedicada a actividades industriales, mercantiles o de prestación de servicios con <strong>fines lucrativos</strong>. Proporciona bienes o servicios a cambio de un precio.</p>
+      <p><strong>Elementos</strong> (componentes de la empresa):</p>
+      <ul>
+        <li><strong>Capital físico</strong> — máquinas, mobiliario, oficinas, fábricas.</li>
+        <li><strong>Capital humano</strong> — todas las personas, desde el empresario hasta el personal asalariado.</li>
+        <li><strong>Rasgos intangibles</strong> — marca, experiencia, conocimiento.</li>
+        <li><strong>Capital financiero</strong> — el dinero en sus múltiples formas.</li>
+      </ul>
+    </section>
+    <section>
+      <p>Función básica de la empresa: <strong>organizar y dirigir el proceso de producción</strong>, asumiendo riesgos técnicos y económicos.</p>
+      <p><strong>Áreas funcionales</strong> de la empresa:</p>
+      <ol>
+        <li><strong>Dirección</strong> — definir objetivos, recursos y organización.</li>
+        <li><strong>Gestión económica y financiera</strong> — contabilidad, finanzas, fiscalidad.</li>
+        <li><strong>Comercialización</strong> — mercados, ventas, <em>marketing</em>.</li>
+        <li><strong>Producción</strong> — diseñar productos, procesos, control de calidad.</li>
+        <li><strong>Recursos humanos</strong> — selección, formación, prevención de riesgos.</li>
+      </ol>
+      <p>Según <strong>Henry Fayol</strong>, seis grupos de funciones: técnicas, comerciales, financieras, de seguridad, contables y administrativas.</p>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.4. La empresa: objetivos <span class="page-ref">(pp. 20-21)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Los objetivos dependen de cada empresa:</p>
+      <ul>
+        <li><strong>Empresas privadas</strong> → <strong>maximizar beneficios</strong>.</li>
+        <li><strong>Empresas públicas</strong> → buscar el <strong>equilibrio financiero</strong>.</li>
+        <li><strong>Grandes empresas</strong> → maximizar su <strong>crecimiento</strong> a medio y largo plazo.</li>
+        <li><strong>Pequeñas empresas</strong> → <strong>sobrevivir</strong>.</li>
+      </ul>
+      <p>La <strong>dirección de la empresa</strong> busca tres cosas: <strong>maximizar producción y beneficio</strong>, lograr un <strong>crecimiento equilibrado</strong> en todas las áreas y mantener <strong>estabilidad socioeconómica</strong>.</p>
+      <p>Los <strong>objetivos</strong> se agrupan en cuatro clases:</p>
+      <ol>
+        <li>Maximización del <strong>beneficio</strong> o de rentabilidad.</li>
+        <li><strong>Crecimiento</strong> y poder de mercado.</li>
+        <li><strong>Estabilidad</strong> y adaptabilidad al medio.</li>
+        <li>Naturaleza <strong>social</strong> o servicio a la colectividad (más presente en empresas públicas).</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.5. Clasificación empresarial <span class="page-ref">(pp. 21-22)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Las empresas se clasifican según cinco criterios: <strong>sector de actividad</strong>, <strong>tamaño</strong>, <strong>propiedad del capital</strong>, <strong>ámbito de actuación</strong> y <strong>forma jurídica</strong>.</p>
+
+      <table class="study-table">
+        <tr><th colspan="2">Sector de actividad</th></tr>
+        <tr><td>Primario</td><td>Agricultura, ganadería, pesca, minería</td></tr>
+        <tr><td>Secundario</td><td>Actividades industriales y construcción</td></tr>
+        <tr><td>Terciario</td><td>Actividades comerciales y servicios</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th>Tamaño</th><th>Efectivos</th><th>Vol. negocio</th><th>Balance</th></tr>
+        <tr><td>Mediana</td><td>&lt; 250</td><td>≤ 50 M €</td><td>≤ 43 M €</td></tr>
+        <tr><td>Pequeña</td><td>&lt; 50</td><td>≤ 10 M €</td><td>≤ 10 M €</td></tr>
+        <tr><td>Micro</td><td>&lt; 10</td><td>≤ 2 M €</td><td>≤ 2 M €</td></tr>
+      </table>
+      <p>En España las pymes constituyen el <strong>99,8 %</strong> del tejido empresarial.</p>
+
+      <table class="study-table">
+        <tr><th colspan="2">Propiedad del capital</th></tr>
+        <tr><td>Privada</td><td>Propiedad de personas físicas o jurídicas particulares</td></tr>
+        <tr><td>Pública</td><td>Propiedad del Estado o entidad pública</td></tr>
+        <tr><td>Mixta</td><td>Compartida entre Estado y particulares</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th colspan="2">Ámbito de actuación</th></tr>
+        <tr><td>Locales</td><td>Una sola localidad o entorno cercano</td></tr>
+        <tr><td>Nacionales</td><td>Todo el país</td></tr>
+        <tr><td>Internacionales</td><td>Dos o más países, pueden ser multinacionales</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th colspan="2">Forma jurídica</th></tr>
+        <tr><td colspan="2" style="font-weight:400"><strong>Personalidad física:</strong> empresario individual, sociedad civil, comunidad de bienes</td></tr>
+        <tr><td colspan="2" style="font-weight:400"><strong>Personalidad jurídica:</strong></td></tr>
+        <tr><td style="padding-left:1.2rem">Personalistas</td><td>Sociedad comanditaria simple, sociedad colectiva</td></tr>
+        <tr><td style="padding-left:1.2rem">Capitalistas</td><td>Sociedad limitada, S. comanditaria por acciones, <strong>sociedad anónima</strong></td></tr>
+        <tr><td style="padding-left:1.2rem">Interés social</td><td>Sociedad laboral, sociedad cooperativa</td></tr>
+      </table>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Personalidad jurídica:</strong> aptitud para ser titular de derechos y obligaciones y el reconocimiento de capacidad jurídica y de obrar. Corresponde a toda persona, no física.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.6. Localización y dimensión de la empresa <span class="page-ref">(pp. 23-24)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>localización empresarial</strong> es una decisión de enorme repercusión.</p>
+      <p><strong>Factores de localización industrial</strong> (función de producción):</p>
+      <ul>
+        <li>Acceso a <strong>materias primas</strong> en cantidad suficiente y al menor coste.</li>
+        <li><strong>Mano de obra cualificada</strong> en la zona.</li>
+        <li><strong>Accesibilidad y buenas comunicaciones</strong>, medios de transporte.</li>
+        <li><strong>Ayudas o beneficios fiscales</strong> de corporaciones locales.</li>
+      </ul>
+      <p><strong>Factores de localización comercial</strong> (función comercial):</p>
+      <ul>
+        <li><strong>Buena localización</strong> en condiciones óptimas.</li>
+        <li><strong>Proximidad</strong> al público objetivo.</li>
+        <li><strong>Visibilidad</strong> del local.</li>
+        <li><strong>Comunicaciones y facilidad de acceso.</strong></li>
+        <li><strong>Actividades complementarias</strong> (ej. centros comerciales).</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>2.6.1. Dimensión empresarial</strong></p>
+      <p>La <strong>dimensión</strong> (tamaño) de la empresa es su <strong>nivel máximo de capacidad productiva</strong>.</p>
+      <p>Aumentar la dimensión es clave para la <strong>competitividad</strong>: impulsa crecimiento, internacionalización, empleo, avance tecnológico e I+D+i.</p>
+      <p>Una característica del tejido empresarial español es la <strong>pequeña dimensión de las empresas familiares</strong>, comparada con la UE y los países más avanzados.</p>
+      <p>Las empresas aspiran a un <strong>tamaño óptimo</strong>: uno excesivo genera costes que no puede mantener; uno demasiado reducido desperdicia oportunidades de mercado.</p>
+      <p>Dos elementos condicionan la dimensión: la <strong>demanda</strong> y las <strong>economías de escala</strong>.</p>
+      <p><strong>Coste unitario</strong> = Coste máquina / N.º de productos fabricados.</p>
+      <p>Factores para ajustar la dimensión empresarial:</p>
+      <ul>
+        <li>Grandes <strong>inversiones</strong> en infraestructuras para alcanzar economías de escala.</li>
+        <li>A mayor <strong>cuota de mercado</strong>, mayor dimensión empresarial.</li>
+        <li><strong>Flexibilidad</strong> a los cambios de la demanda.</li>
+        <li>Gran capacidad financiera y <strong>endeudamiento</strong> para invertir.</li>
+      </ul>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Logística:</strong> todas las fases que intervienen en un producto desde su fabricación hasta su consumo por el cliente final.<br>
+      <strong>Economía de escala:</strong> modelo empresarial que busca reducir costes a través de la producción masiva. Al aumentar la cantidad de productos fabricados, se reducen los costes de la cadena de producción, ya que disminuye el coste medio de fabricación.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.7. Estrategias de crecimiento <span class="page-ref">(pp. 25-26)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Existen <strong>dos modalidades</strong> de crecimiento: <strong>interno</strong> (inversiones propias para mejorar la capacidad productiva) y <strong>externo</strong> (adquirir, fusionarse o colaborar con otras empresas).</p>
+
+      <table class="study-table">
+        <tr><th colspan="3">Crecimiento interno — Expansión</th></tr>
+        <tr><th>Estrategia</th><th>Descripción</th><th>Ejemplo</th></tr>
+        <tr><td>Penetración</td><td>Incrementar cuota de mercado, captar más clientes</td><td>—</td></tr>
+        <tr><td>Desarrollo de producto</td><td>Nuevos productos en mercados actuales</td><td>—</td></tr>
+        <tr><td>Desarrollo de mercados</td><td>Acceder a nuevos mercados</td><td>—</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th colspan="3">Crecimiento interno — Diversificación</th></tr>
+        <tr><th>Tipo</th><th>Descripción</th><th>Ejemplo</th></tr>
+        <tr><td>Vertical</td><td>Asumir actividades que antes se delegaban</td><td>Zara: diseño + fabricación + logística + venta</td></tr>
+        <tr><td>Horizontal</td><td>Productos/servicios sin relación con la actividad principal</td><td>Coca-Cola → Jugos del Valle</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th colspan="3">Crecimiento externo — Cooperación</th></tr>
+        <tr><th>Forma</th><th>Descripción</th><th>Ejemplo</th></tr>
+        <tr><td>Franquicia</td><td>Adherirse a una marca extendida</td><td>McDonalds</td></tr>
+        <tr><td>Joint venture</td><td>Proyecto conjunto manteniendo personalidad jurídica</td><td>Nestlé + Coca-Cola</td></tr>
+        <tr><td>Cártel</td><td>Mismo sector, acuerdan precios y estrategia</td><td>OPEP</td></tr>
+        <tr><td>UTE</td><td>Unión temporal para un proyecto concreto</td><td>Edisol UTE</td></tr>
+        <tr><td>Cluster</td><td>Colaboración sectorial para beneficios comunes</td><td>Silicon Valley</td></tr>
+      </table>
+
+      <table class="study-table">
+        <tr><th colspan="3">Crecimiento externo — Concentración</th></tr>
+        <tr><th>Forma</th><th>Descripción</th><th>Ejemplo</th></tr>
+        <tr><td>Absorción</td><td>Una empresa adquiere otra que desaparece</td><td>Google → Motorola</td></tr>
+        <tr><td>Fusión</td><td>Varias empresas se unen en una nueva</td><td>BBV + Argentaria = BBVA</td></tr>
+        <tr><td>Trust</td><td>Fusión en el mismo sector para reducir competencia</td><td>MATEL + Fisher Price</td></tr>
+        <tr><td>Adquisición</td><td>Compra respetando la identidad de la adquirida</td><td>Facebook → WhatsApp</td></tr>
+        <tr><td>Holdings</td><td>Control mediante acciones o participaciones</td><td>Inditex</td></tr>
+      </table>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Franquicia:</strong> contrato por el que se concede el derecho a utilizar una marca por un tiempo y en un lugar a cambio de una cantidad de dinero.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.8. PYME y multinacionales: características, estrategias, ventajas e inconvenientes <span class="page-ref">(pp. 26-27)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Las <strong>pymes</strong> son las entidades empresariales más importantes a nivel mundial. Según la ONU, generan el <strong>60-70 % del empleo</strong> y más del 50 % del PIB. En España: <strong>99,8 % del tejido empresarial</strong> y <strong>66,4 % del empleo</strong>.</p>
+
+      <table class="study-table">
+        <tr><th>Oportunidades de las pymes</th><th>Problemas de las pymes</th></tr>
+        <tr><td>Se <strong>adaptan mejor</strong> a los cambios</td><td>Financiación limitada (socios, pequeños préstamos)</td></tr>
+        <tr><td><strong>Conocen mejor al cliente</strong>, nichos de mercado</td><td><strong>Producen con mayor coste</strong> (sin economías de escala)</td></tr>
+        <tr><td><strong>Habilidad artesanal</strong> muy valorada</td><td><strong>Sin poder de negociación</strong> con clientes/proveedores</td></tr>
+        <tr><td><strong>Decisiones más rápidas</strong>, mejor comunicación</td><td><strong>Menor formación</strong> del personal</td></tr>
+        <tr><td>Más fácil <strong>vincular al personal</strong></td><td><strong>Pocos recursos</strong> tecnológicos</td></tr>
+      </table>
+    </section>
+    <section>
+      <table class="study-table">
+        <tr><th>Tipo internacional</th><th>Descripción</th><th>Ejemplo</th></tr>
+        <tr><td>Supranacionales</td><td>Comercializan en países diferentes al de origen</td><td>Bimbo</td></tr>
+        <tr><td>Trasnacionales</td><td>Sedes en otros países con capacidad jurídica propia</td><td>McDonalds</td></tr>
+        <tr><td>Multinacionales</td><td>Actividades en el exterior sin distinciones respecto al origen</td><td>Apple, Google, Amazon</td></tr>
+      </table>
+
+      <p><strong>Características comunes</strong> de las multinacionales: tecnología avanzada, elevada inversión en I+D, organización descentralizada, afán de lucro, dominio del entorno, gran poder económico y social.</p>
+
+      <table class="study-table">
+        <tr><th>Ventajas de las multinacionales</th><th>Inconvenientes</th></tr>
+        <tr><td>Desarrollo de países menos desarrollados</td><td>Abuso del medioambiente y condiciones laborales</td></tr>
+        <tr><td>Disminución de costes</td><td>Perjuicio para pequeñas empresas</td></tr>
+        <tr><td>Progreso tecnológico</td><td>Pérdida de empleo en países desarrollados</td></tr>
+      </table>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.9. Marco jurídico que regula la actividad empresarial: el Código de Comercio y leyes sobre sociedades de capital <span class="page-ref">(p. 27)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La normativa empresarial se basa en tres ramas del derecho:</p>
+      <ul>
+        <li><strong>Derecho mercantil</strong> — regula la actividad económica empresarial (Código de Comercio). Incluye el tratamiento de la empresa, la tipología empresarial, la contabilidad, la publicidad y la protección de la actividad empresarial.</li>
+        <li><strong>Derecho laboral</strong> — tiene por objeto la tutela del trabajo humano. Se ocupa del derecho individual del trabajo, del colectivo, de la Seguridad Social y del derecho procesal laboral.</li>
+        <li><strong>Derecho fiscal</strong> — obtener ingresos para cubrir los gastos públicos. Los ingresos públicos provienen de los <strong>tributos</strong> (tasas, contribuciones e impuestos).</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Responsabilidades del empresariado:</strong></p>
+      <ul>
+        <li><strong>Contables</strong> — llevar una contabilidad adecuada a la actividad de la empresa.</li>
+        <li><strong>Competencia y publicidad</strong> — la ley sanciona conductas que impidan, restrinjan o falseen la competencia. No se puede abusar de posición dominante.</li>
+        <li><strong>Propiedad industrial y defensa de consumidores</strong> — leyes para creación de nuevos inventos patentados. El consumidor está protegido y puede ser indemnizado.</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Tipos de impuestos:</strong></p>
+      <ul>
+        <li><strong>Directos</strong> — IRPF, impuesto de sociedades, impuesto de actividades económicas, impuesto sobre transmisiones patrimoniales.</li>
+        <li><strong>Indirectos</strong> — IVA (impuesto sobre el valor añadido).</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.9.1. Formas jurídicas de empresa <span class="page-ref">(pp. 27-28)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p><strong>Comparativa rápida:</strong></p>
+      <table class="study-table">
+        <tr><th>Forma</th><th>Tipo</th><th>Socios</th><th>Capital mínimo</th><th>Responsabilidad</th><th>Impuesto</th></tr>
+        <tr><td>Empresario individual</td><td>Persona física</td><td>1</td><td>Sin mínimo</td><td>Ilimitada</td><td>IRPF</td></tr>
+        <tr><td>Sociedad colectiva</td><td>Personalista</td><td>Mín. 2</td><td>Sin mínimo</td><td>Ilimitada y solidaria</td><td>IS</td></tr>
+        <tr><td>Sociedad limitada (S.L.)</td><td>Capitalista</td><td>Mín. 1</td><td>1 – 3.000 €</td><td>Limitada al capital</td><td>IS</td></tr>
+        <tr><td>Sociedad anónima (S.A.)</td><td>Capitalista</td><td>Mín. 1</td><td>60.000 € (25% desembolsado)</td><td>Limitada al capital</td><td>IS</td></tr>
+        <tr><td>Sociedad laboral</td><td>Capitalista</td><td>Mín. 2</td><td>Según sea S.L. o S.A.</td><td>Limitada al capital</td><td>IS</td></tr>
+        <tr><td>Sociedad cooperativa</td><td>Interés social</td><td>Mín. 3</td><td>Variable</td><td>Limitada a aportaciones</td><td>IS (bonificado)</td></tr>
+      </table>
+    </section>
+    <section>
+      <p><strong>Empresario individual</strong> — persona física que realiza en nombre propio, de forma habitual y directa, una actividad comercial, industrial o profesional, asumiendo el riesgo y el control del negocio.</p>
+      <ul>
+        <li>No hay distinción entre patrimonio personal y empresarial (responde con todos sus bienes presentes y futuros).</li>
+        <li>Constitución sencilla y rápida. Adecuada para negocios pequeños con poco riesgo.</li>
+        <li><strong>Gobierno:</strong> el empresario dirige, gestiona y representa el negocio. Decisiones unilaterales. Puede contar con apoderados o gerentes. Titularidad y responsabilidad recaen sobre él.</li>
+        <li><em>Ejemplos: taxista, fontanero.</em></li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Sociedad colectiva</strong> — sociedad mercantil personalista en la que todos los socios participan en la gestión a partes iguales y responden subsidiaria e ilimitadamente de las deudas sociales.</p>
+      <ul>
+        <li>Responsabilidad personal, ilimitada y solidaria de los socios con su patrimonio.</li>
+        <li>Sin capital mínimo legal. Razón social con nombre de los socios. Se constituye en escritura pública inscrita en el Registro Mercantil.</li>
+        <li><strong>Gobierno:</strong> todos los socios administran (salvo designación en escritura). Decisiones por unanimidad, salvo pacto de mayorías. Socios administradores representan a la sociedad frente a terceros.</li>
+        <li><em>Ejemplos: pequeños negocios familiares, bodegas, tiendas históricas.</em></li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Sociedad limitada (S.L.)</strong> — sociedad mercantil capitalista cuyo capital, dividido en participaciones sociales, está integrado por las aportaciones de los socios, que no responden personalmente de las deudas sociales.</p>
+      <ul>
+        <li>Puede constituirla un solo socio (S.L. unipersonal) o varios.</li>
+        <li>Capital mínimo de 1 a 3.000 €, dividido en participaciones. Escritura pública en Registro Mercantil. Forma más habitual entre PYMES.</li>
+        <li><strong>Gobierno:</strong> Junta General de socios (órgano soberano que decide sobre cuentas anuales, nombramiento de administradores). Órgano de administración: administrador único, solidarios o Consejo de Administración.</li>
+        <li><em>Ejemplos: tienda de ropa, restaurante, pequeño consultor.</em></li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Sociedad anónima (S.A.)</strong> — sociedad mercantil capitalista cuyo capital social, dividido en acciones libremente transmisibles, está integrado por las aportaciones de los socios, que no responden personalmente de las deudas sociales.</p>
+      <ul>
+        <li>Puede constituirla un único socio o varios.</li>
+        <li>Capital mínimo 60.000 € (desembolso mínimo del 25%). Acciones libremente transmisibles, pueden cotizar en bolsa. Ideal para grandes empresas por su facilidad de captar grandes cantidades de capital.</li>
+        <li><strong>Gobierno:</strong> Junta General de accionistas (órgano soberano, decide sobre materias reservadas por ley o estatutos). Consejo de Administración: gestiona y representa la sociedad, ejecuta acuerdos de la Junta y dirige el día a día.</li>
+        <li><em>Ejemplos: Santander, Inditex, Iberdrola.</em></li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Sociedad laboral</strong> — sociedad limitada o anónima en la que la mayoría del capital social pertenece a los trabajadores que prestan servicios retribuidos de forma personal y directa, con relación laboral indefinida.</p>
+      <ul>
+        <li>Al menos el 51% del capital debe pertenecer a socios trabajadores; ningún socio puede poseer más de un tercio.</li>
+        <li>Fondo especial de reserva obligatorio. Requiere calificación administrativa e inscripción en registro. Fomenta la participación de los trabajadores en la propiedad y en los resultados de la empresa.</li>
+        <li><strong>Gobierno:</strong> Junta General de socios (acuerdos más importantes). Órgano de administración (gestión y representación). Representación específica de socios trabajadores.</li>
+        <li><em>Ejemplos: empresas en crisis, industria manufacturera.</em></li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Sociedad cooperativa</strong> — sociedad constituida por personas que se asocian en régimen de libre adhesión y baja voluntaria, para realizar actividades empresariales encaminadas a satisfacer necesidades económicas y sociales, con estructura y funcionamiento democrático.</p>
+      <ul>
+        <li>Gestión democrática independiente del capital aportado. Capital social variable, sin necesidad de escritura pública ante cambios.</li>
+        <li>Beneficios se distribuyen según actividad cooperativizada, no según capital. Fiscalidad específica con posibles bonificaciones.</li>
+        <li><strong>Gobierno:</strong> Asamblea General (órgano soberano, acuerdos por voto). Consejo Rector (administración y representación). Interventor/Comisión de vigilancia según estatutos.</li>
+        <li><em>Ejemplo: Eroski.</em></li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<h2>Entorno empresarial</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>3. Entorno empresarial <span class="page-ref">(p. 28)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La empresa es un <strong>sistema abierto</strong>: necesita clientes, proveedores, competencia, leyes, impuestos, medioambiente, etc.</p>
+      <p>El entorno se divide en dos grandes grupos: <strong>específico</strong> y <strong>general</strong>.</p>
+    </section>
+    <section>
+      <p><strong>Entorno específico</strong> — factores que afectan a empresas de nuestro sector:</p>
+      <ol>
+        <li>Demanda de <strong>clientes</strong> o consumidores.</li>
+        <li>Características de <strong>proveedores</strong> o suministradores.</li>
+        <li>Análisis de <strong>competidores</strong>.</li>
+        <li>Productos <strong>sustitutivos</strong> del mercado.</li>
+        <li><strong>Intermediarios</strong> en la distribución.</li>
+      </ol>
+    </section>
+    <section>
+      <p><strong>Entorno general</strong> — factores político-legales, económicos, sociales y tecnológicos:</p>
+      <ul>
+        <li><strong>Factores político-legales</strong> — normas sobre impuestos, contratación, Seguridad Social, etc.</li>
+        <li><strong>Factores económicos</strong> — tasa de desempleo, inflación, tipos de interés, salarios.</li>
+        <li><strong>Factores sociales</strong> — estilo de vida, hábitos alimentarios, religión, etc.</li>
+        <li><strong>Factores tecnológicos</strong> — avances técnicos, electrónica, nuevas tecnologías.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>3.1. Responsabilidad social corporativa (RSC) <span class="page-ref">(pp. 28-29)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>RSC</strong> son los compromisos y obligaciones que asume una empresa con la ciudadanía y las comunidades, impulsando desarrollo económico, educación y causas sociales. Incorpora valores éticos, cuidado del medioambiente y sustentabilidad.</p>
+      <p><strong>Beneficios:</strong> mejora el clima laboral, incrementa la confianza de accionistas e inversores, reduce sanciones y proyecta una imagen genuina y cercana.</p>
+    </section>
+    <section>
+      <p><strong>Alcances de la RSC:</strong></p>
+      <ul>
+        <li><strong>Social y de desarrollo</strong> — contribuir a la sociedad y comunidad.</li>
+        <li><strong>Solidario e igualitario</strong> — derechos y deberes de empresas y sociedad.</li>
+        <li><strong>De autorreferencia</strong> — relación entre la empresa, accionistas, clientes y trabajadores.</li>
+        <li><strong>Ético sistémico</strong> — responsabilidad con los grupos de interés de manera permanente.</li>
+        <li><strong>Ético y de valores</strong> — trabajar bajo valores y difundirlos a todas las áreas.</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Metodología</strong> para aplicar la RSC:</p>
+      <ol>
+        <li><strong>Diagnóstico</strong> — identificar necesidades y puntos débiles.</li>
+        <li><strong>Autoevaluación</strong> en cinco frentes: valores y principios éticos, condiciones de trabajo y empleo, apoyo a la comunidad, protección del medioambiente, <em>marketing</em> responsable.</li>
+        <li><strong>Definir una misión</strong> para cada grupo de presión: accionistas, proveedores, empleados, medios de comunicación, instituciones, clientes, etc.</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+
+<h2>Digitalización e innovación</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>4.1. Investigación y desarrollo (I+D+i) <span class="page-ref">(p. 30)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>digitalización</strong> permite a las organizaciones beneficiarse de nuevas tendencias de consumo e innovación desde múltiples puntos de vista.</p>
+      <p>La <strong>investigación</strong> y la <strong>innovación</strong> son elementos clave para el <strong>desarrollo sostenible</strong>, la competitividad y la formación del capital humano.</p>
+      <p>Las empresas han utilizado un modelo matemático llamado <strong>«matriz tecnológica»</strong>: optimizar la combinación de factores productivos con las mejores tecnologías disponibles.</p>
+      <p>Invertir e innovar <strong>es una inversión altamente rentable</strong> si se realiza de forma eficiente. Existe una relación directa entre la capacidad de innovación de una empresa y su competitividad.</p>
+    </section>
+    <section>
+      <p><strong>I+D+i</strong> = Investigación + Desarrollo + Innovación. <strong>Esko Aho</strong>, ex primer ministro de Finlandia, definió la innovación (i) como <em>invertir dinero para obtener conocimiento</em>. Es el resultado del trabajo conjunto de la ciencia, la tecnología y la economía.</p>
+      <p>Suele ser factor de diferenciación de las grandes empresas por su capacidad financiera. Las <strong>PYME</strong> necesitan congregar la estrategia de empresas, universidades, administración y centros tecnológicos.</p>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Benchmarking:</strong> toma de referencia de las actuaciones de empresas líderes del sector para obtener información útil e implementar mejoras.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>4.2. Teorías de la innovación <span class="page-ref">(pp. 30-31)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <table class="study-table">
+        <tr><th>Teoría</th><th>Idea clave</th></tr>
+        <tr><td>Schumpeter (1939)</td><td>«Destrucción creativa»: las nuevas tecnologías sustituyen a las viejas</td></tr>
+        <tr><td>Visión neoclásica</td><td>Desarrollo de productos y mejora de la eficacia</td></tr>
+        <tr><td>Organización industrial (Tirole, 1995)</td><td>Innovar para buscar ventajas competitivas</td></tr>
+        <tr><td>Innovación de la organización (Lam, 2005)</td><td>Adaptación a cambios tecnológicos y de mercados</td></tr>
+        <tr><td>Comercialización (Hunt, 1983)</td><td>Comportamiento del consumidor</td></tr>
+        <tr><td>Difusión</td><td>Acceso a nuevos conocimientos y capacidad de absorción</td></tr>
+      </table>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>4.3. Tipos de innovación <span class="page-ref">(pp. 31-32)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>El nuevo <em>Manual de Oslo</em> (2005) define cuatro <strong>tipos de innovación</strong>:</p>
+      <table class="study-table">
+        <tr><th>Tipo</th><th>Descripción</th></tr>
+        <tr><td>De producto</td><td>Bien o servicio nuevo o significativamente mejorado</td></tr>
+        <tr><td>De proceso</td><td>Proceso de producción o distribución nuevo o mejorado</td></tr>
+        <tr><td>De mercadotecnia</td><td>Nuevo método de comercialización (diseño, envasado, posicionamiento, tarificación)</td></tr>
+        <tr><td>De organización</td><td>Nuevo método organizativo en las prácticas y relaciones exteriores</td></tr>
+      </table>
+    </section>
+  </div>
+</div>
+
+
+<h1 id="tema2">Tema 2. Modelo de negocio: organización y relaciones laborales</h1>
+<h2>Empresa y modelo de negocio</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1. Empresa y modelo de negocio <span class="page-ref">(p. 37)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>El <strong>modelo de negocio</strong> es una herramienta que aporta soluciones a una necesidad de un mercado, distinguiendo cuál es el <strong>valor del producto</strong>, qué se necesita para insertarlo en el mercado y a qué tipo de clientes se venderá.</p>
+      <p>Se caracteriza por:</p>
+      <ul>
+        <li>Conocer el tipo de <strong>cliente potencial</strong> y los pasos para ofrecer bienes y productos.</li>
+        <li>Analizar las <strong>exigencias del mercado</strong>, el alcance de la marca y la competencia.</li>
+        <li>Definir <strong>cómo se venderá</strong> un producto o servicio.</li>
+        <li>Permitir <strong>estructurar el funcionamiento</strong> de la empresa dando respuesta al mercado.</li>
+      </ul>
+    </section>
+    <section>
+      <p>El <strong>plan de negocio</strong> es un documento donde se diseña y planifica un nuevo proyecto comercial. Es diferente del modelo de negocio:</p>
+      <ul>
+        <li>Crear una <strong>guía detallada</strong> del modo de cumplir la meta de un negocio.</li>
+        <li>Describir <strong>objetivos, metodologías y formas de trabajo</strong>.</li>
+        <li>Establecer la <strong>organización de actividades internas</strong>, responsabilidades y estrategias de trabajo.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.1. Planificación <span class="page-ref">(pp. 37-38)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>El documento que describe la planificación empresarial es el <strong>Plan de Empresa</strong>. Analiza la viabilidad de una oportunidad de negocio y desarrolla procedimientos y estrategias. Elementos mínimos:</p>
+      <ul>
+        <li><strong>Objetivos</strong> — lo que se desea lograr (niveles productivos).</li>
+        <li><strong>Políticas</strong> — principios que determinan la <strong>conducta</strong> y la toma de decisiones.</li>
+        <li><strong>Procedimientos</strong> — guías que detallan las <strong>tareas</strong> y pasos específicos a seguir.</li>
+        <li><strong>Reglas</strong> — normas esenciales, más estrictas que los procedimientos (ej. seguridad e higiene).</li>
+        <li><strong>Presupuestos</strong> — documentos con los <strong>ingresos</strong> y los <strong>gastos</strong> previstos.</li>
+      </ul>
+    </section>
+    <section>
+      <p>La <strong>función de planificación</strong> es una herramienta de gestión para desarrollar planes adaptados al entorno y alcanzar objetivos previstos.</p>
+      <p>Dos tipos de planificación:</p>
+      <ul>
+        <li><strong>Planificación estratégica</strong> — objetivos a <strong>medio y largo plazo</strong>, afecta a <strong>todos los departamentos</strong>.</li>
+        <li><strong>Planificación táctica</strong> — objetivos a <strong>corto plazo</strong>, solo afecta a <strong>determinados departamentos</strong>.</li>
+      </ul>
+      <p>Modelos de planificación: análisis <strong>DAFO</strong> y análisis <strong>PEST</strong>.</p>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.2. Dirección y liderazgo <span class="page-ref">(pp. 38-39)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>organización</strong> de una empresa determina su <strong>estructura</strong> (secciones, departamentos), la relación entre cada cargo y el grado de responsabilidad. Su finalidad es encontrar el nivel productivo <strong>más eficiente</strong>.</p>
+      <p><strong>Niveles de dirección</strong> tradicionales:</p>
+      <ol>
+        <li><strong>Alta dirección</strong> — consejos de administración y directores de áreas. Decisiones trascendentales a <strong>largo plazo</strong> (fusiones, cambios de producción, etc.).</li>
+        <li><strong>Dirección intermedia</strong> — directores de fábricas, gerentes, jefes de divisiones. Lograr los planes de la alta dirección y <strong>controlar resultados</strong>.</li>
+        <li><strong>Dirección operativa</strong> — jefes de obra, secciones, capataces. <strong>Mandos directos</strong> de los trabajadores, asignan tareas concretas.</li>
+      </ol>
+    </section>
+    <section>
+      <p><strong>Cinco niveles de Mintzberg</strong> en la estructura organizativa:</p>
+      <ol>
+        <li><strong>Cumbre estratégica</strong> — alta dirección, toma las decisiones globales.</li>
+        <li><strong>Línea media</strong> — dirección intermedia, enlaza la cumbre con las operaciones.</li>
+        <li><strong>Núcleo de operaciones</strong> — operarios y demás trabajadores.</li>
+        <li><strong>Tecnoestructura</strong> — trabajadores que diseñan y adaptan la estructura al entorno.</li>
+        <li><strong>Personal de apoyo</strong> (<em>staff</em>) — personal especializado que asesora o colabora (ej. gabinete jurídico).</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.3. Estructuras organizativas <span class="page-ref">(pp. 39-40)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Dos <strong>tipos principales</strong> de organización:</p>
+      <ol>
+        <li><strong>Organización informal</strong> — relaciones <strong>espontáneas</strong> entre personas que comparten trabajos. Los líderes surgen por relaciones sociales, afinidad o carácter.</li>
+        <li><strong>Organización formal</strong> — determinada por la dirección. Dos estilos:
+          <ul>
+            <li><strong>Autocrático</strong> — comunicación <strong>vertical</strong> de arriba hacia abajo, toma de decisiones <strong>centralizada</strong>.</li>
+            <li><strong>Participativo</strong> — <strong>descentralización</strong>, decisiones consensuadas con subordinados, líder como servidor que implica a los trabajadores.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.3.1. Organigramas: concepto y tipos <span class="page-ref">(pp. 39-40)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Desde mediados del siglo XIX, cuando Daniel McCallum diseñó un diagrama ilustrado del ferrocarril de Nueva York y Erie, la estructura de una organización formal se representa gráficamente por medio de <strong>organigramas</strong>.</p>
+      <p>Un <strong>organigrama</strong> es una representación gráfica simplificada de la estructura organizativa formal de una empresa, es decir, de los puestos de trabajo con sus funciones, niveles de autoridad y relaciones. Sus <strong>elementos esenciales</strong> son:</p>
+      <ul>
+        <li>Deben ser <strong>claros</strong>, con figuras bien separadas.</li>
+        <li>El <strong>número de cuadros será limitado</strong>, empezando por cargos de mayor responsabilidad.</li>
+        <li>Preferentemente <strong>nombres de funciones</strong>, no de personas.</li>
+      </ul>
+      <p>Se clasifican en función del diseño en dos tipos: <strong>horizontales</strong> (de izquierda a derecha) y <strong>verticales</strong> (de arriba abajo).</p>
+    </section>
+    <section>
+      <p><strong>Cualidades de un líder:</strong> confianza, empatía, motivación, optimismo, resiliencia, responsabilidad y transparencia.</p>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.3.2. División del trabajo y departamentalización de la empresa <span class="page-ref">(p. 40)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>división del trabajo</strong> fracciona las distintas actividades que conforman un proceso productivo de un bien o servicio.</p>
+      <p>La <strong>especialización</strong> es la asignación de las diferentes tareas de un proceso productivo a trabajadores o equipos que presentan aptitudes o habilidades concretas. La especialización ha facilitado que las empresas crezcan y se hagan más complejas, dando lugar a la <strong>departamentalización</strong> (agrupar diversas tareas bajo un mismo criterio).</p>
+      <p>Un <strong>área funcional</strong> es un departamento de la empresa que comparte tareas y objetivos. Las más comunes son: dirección, producción, finanzas y recursos humanos. No confundir el área funcional con las funciones básicas de la dirección.</p>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.3.3. Modelos de estructuras organizativas <span class="page-ref">(pp. 40-42)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <table class="study-table">
+        <tr><th>Modelo</th><th>Descripción</th><th>Ventajas</th><th>Inconvenientes</th></tr>
+        <tr><td>Lineal o jerárquico</td><td>Principio de unidad de mando. Para estructuras simples con un solo producto o proceso</td><td>Simplicidad, decisiones rápidas, autoridad bien definida</td><td>Excesiva concentración de autoridad, rigidez, desmotivación</td></tr>
+        <tr><td>Funcional</td><td>Especialistas para cada nivel jerárquico. Los empleados pueden recibir órdenes de distintos directivos</td><td>Fomenta la especialización, trabajadores más involucrados</td><td>Posibilidad de órdenes contradictorias, problemas de comunicación</td></tr>
+        <tr><td>En línea y asesoramiento (<em>staff</em>)</td><td>Puestos de consulta que dan consejos pero no dan órdenes</td><td>El <em>staff</em> fomenta la especialización, se mantienen ventajas del modelo lineal</td><td>Decisiones lentas, conflictos si el <em>staff</em> se inmiscuye, incremento de costes</td></tr>
+        <tr><td>Matricial</td><td>Combina funciones y proyectos (matriz de doble entrada). Característico de empresas industriales</td><td>Flexible, equipos multidisciplinares, comunicación fluida</td><td>Mayor esfuerzo de coordinación, conflictos entre directores</td></tr>
+        <tr><td>Teal (Laloux)</td><td>El bienestar y felicidad de los trabajadores es la razón de ser. Pilares: autogestión, propósito evolutivo y plenitud</td><td>Mejora de relaciones sociales, implicación de la plantilla</td><td>Pocas empresas se atreven a implantarlo</td></tr>
+      </table>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1.4. Cultura de empresa <span class="page-ref">(p. 43)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Se refiere a un conjunto de formas de proceder y de pensar que caracterizan a los miembros de una empresa. Su objetivo es lograr la <strong>cohesión</strong> entre todos los miembros y que se identifiquen con ella sintiéndose parte de la empresa. Viene determinada por <strong>tres elementos</strong>:</p>
+      <ul>
+        <li><strong>Misión</strong> — la razón de ser de la empresa, <strong>por qué</strong> existe. Incluye a qué se dedica, a quién se dirige y cuál es su propuesta de valor.</li>
+        <li><strong>Visión</strong> — los <strong>objetivos</strong> de la empresa. Deben ser medibles y alcanzables.</li>
+        <li><strong>Valores</strong> — la <strong>personalidad</strong> de la empresa, cómo son las personas que la forman.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+
 <h2>Gestión de los recursos humanos</h2>
-<h3>Formación</h3>
 
-<section>
-  <p>Las empresas trabajan en un <strong>entorno diverso</strong> (distintos trabajadores, sectores, peculiaridades), por lo que no todas las estrategias funcionan igual.</p>
-  <p>Al implantar metodologías ágiles (ej. Scrum) conviene:</p>
-  <ol>
-    <li>Empezar con un <strong>proyecto pequeño</strong>, no crítico para la empresa.</li>
-    <li><strong>Formar al personal</strong> progresivamente y extenderlo a otros departamentos.</li>
-  </ol>
-</section>
-
-<div class="aviso">
-  <div class="aviso-titulo">&#9888;&#65039; Situaciones a evitar al implantar metodologías ágiles</div>
-  <ul>
-    <li>Que las tareas las decida un <strong>comité</strong>.</li>
-    <li>Que el responsable <strong>no tenga autoridad</strong> ni ejerza liderazgo.</li>
-    <li>Que el responsable tenga <strong>otras actividades</strong> profesionales a la vez.</li>
-  </ul>
+<div class="card">
+  <div class="card-header">
+    <h3>2.1. Evaluación y selección de personal <span class="page-ref">(p. 44)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>gestión de recursos humanos</strong> (RR.HH.) integra a todas las personas de la empresa para que actúen acorde con los objetivos planteados.</p>
+      <p>Se sigue un <strong>plan de formación</strong> donde se detectan las necesidades laborales actuales y futuras.</p>
+      <p>La <strong>evaluación de puestos</strong> consiste en detallar las características de los puestos de trabajo presentes y futuros a cubrir.</p>
+    </section>
+    <section>
+      <p><strong>Proceso de selección de personal</strong> (tres fases):</p>
+      <ol>
+        <li><strong>Puesto vacante</strong> — descripción del puesto de trabajo y las <strong>cualidades</strong> del candidato ideal.</li>
+        <li><strong>Reclutamiento</strong> — localizar el <strong>mayor número posible de candidatos</strong>. Dos tipos:
+          <ul>
+            <li><strong>Interno</strong> (promoción interna) — candidatos de la propia empresa. Ventaja: fomenta la competencia como instrumento motivador, no necesita período de adaptación.</li>
+            <li><strong>Externo</strong> — personas ajenas (familiares, bases de datos, agencias de empleo, agencias de colocación, etc.).</li>
+          </ul>
+        </li>
+        <li><strong>Selección</strong> — se determina el <strong>candidato ideal</strong> mediante criba curricular, entrevistas o pruebas (conocimientos, psicotécnicos, prácticas). Ventaja: se adquieren nuevos puntos de vista que enriquecen la empresa.</li>
+      </ol>
+    </section>
+  </div>
 </div>
 
-<section>
-  <p><strong>Equipo de colaboradores</strong> — el responsable debe:</p>
-  <ul>
-    <li>Hacer la selección.</li>
-    <li>Grupos <strong>reducidos</strong> (3-9 personas), expertos en distintas áreas.</li>
-    <li>Los miembros deben tener <strong>empatía</strong> entre sí.</li>
-  </ul>
-  <p>Después, se expande la metodología ágil poco a poco a otras áreas de la empresa.</p>
-</section>
-
-<h3>Habilidades que demanda el mercado de trabajo</h3>
-
-<section>
-  <p>Son <strong>estrategias de conducta y destrezas</strong> que ayudan a desarrollar eficientemente las tareas laborales. Mejorarlas contribuye a la <strong>mejora de la empleabilidad</strong>.</p>
-  <p>Se potencian a través de la <strong>formación</strong> (continua, reglada o no reglada).</p>
-</section>
-
-<section>
-  <p><strong>Principales habilidades:</strong></p>
-  <ul>
-    <li><strong>Capacidad de negociación</strong> — comprender el proceso, las influencias, presiones y necesidades de las partes.</li>
-    <li><strong>Creatividad</strong> — tareas donde el ser humano se diferencia de las TIC (IA, Big Data, robótica...).</li>
-    <li><strong>Dinamismo</strong> — actuar con energía, rapidez y eficacia en el trabajo.</li>
-    <li><strong>Empatía</strong> — capacidad de ponerse en el lugar de la otra persona.</li>
-    <li><strong>Iniciativa</strong> — planear, desplegar o idear proyectos propios.</li>
-    <li><strong>Inteligencia emocional</strong> — manejar sentimientos y emociones; usar ese conocimiento para dirigir los pensamientos (diálogo, escucha, conciliación).</li>
-    <li><strong>Inteligencia social</strong> — comunicarse y relacionarse con empatía y asertividad (verbal, no verbal, conversación fluida).</li>
-    <li><strong>Liderazgo</strong> — conducir y acompañar a un grupo; aportar ideas innovadoras y motivar.</li>
-    <li><strong>Pensamiento crítico</strong> — resolver problemas, adoptar estrategias de éxito frente a métodos convencionales.</li>
-    <li><strong>Resiliencia</strong> — sobreponerse a circunstancias difíciles o de presión.</li>
-    <li><strong>Trabajo en equipo</strong> — las herramientas digitales permiten trabajo grupal aunque sea en parte individual, con un objetivo común.</li>
-  </ul>
-</section>
-
-<div class="vocab">
-  <div class="vocab-titulo">&#128214; Vocabulario</div>
-  <strong>Asertividad:</strong> cualidad que nos permite expresar nuestras emociones de forma libre, sencilla y mesurada, defendiendo nuestra opinión sin agredir a nadie y sin consentir que nos agredan.
+<div class="card">
+  <div class="card-header">
+    <h3>2.2.3. Formación <span class="page-ref">(p. 46)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Las empresas trabajan en un <strong>entorno diverso</strong> (distintos trabajadores, sectores, peculiaridades), por lo que no todas las estrategias funcionan igual.</p>
+      <p>Al implantar metodologías ágiles (ej. Scrum) conviene:</p>
+      <ol>
+        <li>Empezar con un <strong>proyecto pequeño</strong>, no crítico para la empresa.</li>
+        <li><strong>Formar al personal</strong> progresivamente y extenderlo a otros departamentos.</li>
+      </ol>
+    </section>
+    <section>
+      <p>Hay tres errores típicos que conviene evitar al empezar con metodologías ágiles:</p>
+      <ul>
+        <li>Que las tareas las decida un <strong>comité</strong> en vez de una persona con criterio.</li>
+        <li>Que el responsable <strong>no tenga autoridad</strong> ni ejerza liderazgo real.</li>
+        <li>Que el responsable esté ocupado con <strong>otras actividades</strong> profesionales a la vez.</li>
+      </ul>
+    </section>
+    <section>
+      <p>El responsable del <strong>equipo de colaboradores</strong> debe:</p>
+      <ul>
+        <li>Hacer la selección.</li>
+        <li>Grupos <strong>reducidos</strong> (3-9 personas), expertos en distintas áreas.</li>
+        <li>Los miembros deben tener <strong>empatía</strong> entre sí.</li>
+      </ul>
+      <p>Después, se expande la metodología ágil poco a poco a otras áreas de la empresa.</p>
+    </section>
+  </div>
 </div>
 
-<h3>La contratación y las relaciones laborales de la empresa</h3>
-
-<section>
-  <p>La <strong>contratación</strong> es el acto de formalizar una relación laboral siguiendo un marco normativo que garantiza intereses y derechos de ambas partes.</p>
-  <p>El acuerdo se refleja documentalmente en un <strong>contrato</strong>, que debe incluir estos formalismos:</p>
-  <ol>
-    <li><strong>Partes del contrato</strong> — determinar las partes del contrato de trabajo; además, deberá ser firmado por el director general de la empresa, el responsable directo y el trabajador.</li>
-    <li><strong>Domicilio social</strong> de la empresa.</li>
-    <li><strong>Categoría o grupo profesional</strong> del puesto.</li>
-    <li><strong>Duración</strong> — fecha de firma, comienzo y final (si es temporal).</li>
-    <li><strong>Convenio colectivo</strong> al que está acogido el puesto de trabajo. Según su ámbito puede ser: sectorial, estatal o nacional, autonómico, provincial, interprovincial, local o comarcal, de empresa individual, de empresa nacional, de empresa autonómica, de empresa local, o inferiores a la empresa.</li>
-    <li><strong>Jornada laboral</strong> — duración de la jornada laboral.</li>
-    <li><strong>Remuneración</strong> — detallando salario base, complementos a los que tiene derecho el trabajador y la periodicidad de los pagos.</li>
-    <li><strong>Vacaciones</strong>.</li>
-    <li><strong>Período de preaviso</strong> — para rescindir antes de la finalización.</li>
-    <li><strong>Período de prueba</strong>, si lo hubiere.</li>
-  </ol>
-</section>
-
-<section>
-  <p><strong>Contrato de trabajo:</strong> acuerdo entre empresario y trabajador para la prestación <strong>voluntaria</strong> de servicios laborales, por cuenta <strong>ajena</strong>, en régimen de <strong>dependencia</strong> (bajo dirección del empresario), a cambio de una <strong>retribución</strong>.</p>
-  <p><strong>Convenio colectivo:</strong> acuerdos entre representantes de los trabajadores (sindicatos) y representantes empresariales (patronal) dentro de un sector de actividad.</p>
-  <p>El marco negociador donde se negocia el convenio colectivo se conoce como <strong>negociación colectiva</strong>: proceso negociador entre asociaciones de trabajadores y asociaciones de empresarios.</p>
-</section>
-
-<section>
-  <p><strong>Tipos de contratos según su duración:</strong></p>
-  <ul>
-    <li><strong>Indefinido</strong> — sin fecha de finalización. También si se concatenan contratos temporales que superen 18 meses en un período de 24 meses. Jornada completa o parcial.</li>
-    <li><strong>Temporal</strong> — con fecha o hecho de finalización. Los más comunes:
+<div class="card">
+  <div class="card-header">
+    <h3>2.3. Habilidades que demanda el mercado de trabajo <span class="page-ref">(pp. 46-47)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Son <strong>estrategias de conducta y destrezas</strong> que ayudan a desarrollar eficientemente las tareas laborales. Mejorarlas contribuye a la <strong>mejora de la empleabilidad</strong>.</p>
+      <p>Se potencian a través de la <strong>formación</strong> (continua, reglada o no reglada).</p>
+    </section>
+    <section>
+      <p><strong>Principales habilidades:</strong></p>
       <ul>
-        <li><strong>Eventual por circunstancias de la producción</strong> — para oscilaciones de actividad. Duración: 6 meses (ampliable a 1 año por convenio).</li>
-        <li><strong>Sustitución</strong> — cuando otro trabajador deja la empresa temporalmente con reserva de puesto.</li>
+        <li><strong>Capacidad de negociación</strong> — comprender el proceso, las influencias, presiones y necesidades de las partes.</li>
+        <li><strong>Creatividad</strong> — tareas donde el ser humano se diferencia de las TIC (IA, Big Data, robótica...).</li>
+        <li><strong>Dinamismo</strong> — actuar con energía, rapidez y eficacia en el trabajo.</li>
+        <li><strong>Empatía</strong> — capacidad de ponerse en el lugar de la otra persona.</li>
+        <li><strong>Iniciativa</strong> — planear, desplegar o idear proyectos propios.</li>
+        <li><strong>Inteligencia emocional</strong> — manejar sentimientos y emociones; usar ese conocimiento para dirigir los pensamientos (diálogo, escucha, conciliación).</li>
+        <li><strong>Inteligencia social</strong> — comunicarse y relacionarse con empatía y asertividad (verbal, no verbal, conversación fluida).</li>
+        <li><strong>Liderazgo</strong> — conducir y acompañar a un grupo; aportar ideas innovadoras y motivar.</li>
+        <li><strong>Pensamiento crítico</strong> — resolver problemas, adoptar estrategias de éxito frente a métodos convencionales.</li>
+        <li><strong>Resiliencia</strong> — sobreponerse a circunstancias difíciles o de presión.</li>
+        <li><strong>Trabajo en equipo</strong> — las herramientas digitales permiten trabajo grupal aunque sea en parte individual, con un objetivo común.</li>
       </ul>
-    </li>
-    <li><strong>Fijo discontinuo</strong> — indefinido pero con períodos sin trabajo ni salario (actividad estacional, temporada, contratas y subcontratas). Sin cotización a la Seguridad Social durante la inactividad.</li>
-    <li><strong>Formativos</strong> — incluyen plan formativo individual obligatorio:
-      <ul>
-        <li><strong>Formación en alternancia</strong> — combina formación + trabajo retribuido. Duración: como mínimo 3 meses a 2 años. Trabajo efectivo &lt; 65% (1er año) y &lt; 85% (2º año).</li>
-        <li><strong>Práctica profesional</strong> — para titulados universitarios o de FP. Duración: 6 meses a 1 año. No se permiten horas extras.</li>
-      </ul>
-    </li>
-  </ul>
-</section>
-
-<h3>Estatuto de los Trabajadores</h3>
-
-<section>
-  <p>Texto refundido, última actualización: <strong>Ley 1/2015, de 23 de octubre</strong>. Recoge derechos y deberes laborales en <strong>92 artículos</strong> agrupados en 3 títulos:</p>
-  <ul>
-    <li><strong>Título I</strong> — Relación individual de trabajo: ámbito de aplicación, contratos, modificación, suspensión y extinción del contrato.</li>
-    <li><strong>Título II</strong> — Representación colectiva y reunión: actividad sindical y derecho de representación.</li>
-    <li><strong>Título III</strong> — Negociación colectiva y convenios colectivos.</li>
-  </ul>
-</section>
-
-<h3>Las políticas de igualdad y de inclusión en las empresas</h3>
-
-<section>
-  <p>Las <strong>políticas de igualdad</strong> en España obligan a:</p>
-  <ul>
-    <li>Registro de salarios en las empresas. Medianas y grandes: <strong>auditoría retributiva</strong> para garantizar igualdad salarial + <strong>Plan de Igualdad</strong> obligatorio.</li>
-    <li>Desde 2027, grandes empresas europeas: mínimo <strong>40% de mujeres</strong> en puestos directivos.</li>
-  </ul>
-</section>
-
-<section>
-  <p><strong>Plan de Igualdad</strong> — medidas para eliminar obstáculos a la igualdad efectiva y erradicar la discriminación por sexo. Fases:</p>
-  <ol>
-    <li><strong>Estudio inicial</strong> — diagnóstico previo de la situación.</li>
-    <li><strong>Negociación</strong> — contacto con representantes de los trabajadores.</li>
-    <li><strong>Comisión</strong> — se crea una comisión negociadora.</li>
-  </ol>
-</section>
-
-<section>
-  <p><strong>Políticas de inclusión laboral</strong> — integración de trabajadores con vulnerabilidad (origen étnico, género, enfermedad, orientación sexual...). Empresas con +50 trabajadores: obligación de contratar al menos un <strong>2% de personas con diversidad funcional</strong>.</p>
-</section>
-
-<section>
-  <p><strong>Plan de Diversidad e Inclusión</strong> — etapas:</p>
-  <ol>
-    <li>Organizar <strong>sesiones</strong> sobre diversidad cultural.</li>
-    <li>Definir <strong>valores y principios</strong>.</li>
-    <li>Proyectar el <strong>modelo</strong> de gestión deseado.</li>
-    <li><strong>Elaboración</strong> del Plan.</li>
-    <li><strong>Actualización</strong> y sostenibilidad en el tiempo.</li>
-  </ol>
-</section>
-
-<h3>Elementos básicos de las nóminas</h3>
-
-<section>
-  <p><strong>Nómina</strong> = documento justificante del pago de los salarios. Refleja la <strong>estructura salarial</strong>:</p>
-</section>
-
-<section>
-  <p><strong>1. Devengos</strong> (lo que se cobra):</p>
-  <ul>
-    <li><strong>Percepciones salariales:</strong>
-      <ul>
-        <li>Salario base</li>
-        <li>Complementos salariales (nocturnidad, peligrosidad, antigüedad...)</li>
-        <li>Horas extraordinarias</li>
-        <li>Salario en especie</li>
-      </ul>
-    </li>
-    <li><strong>Percepciones no salariales:</strong>
-      <ul>
-        <li>Dietas, gastos de viaje, locomoción</li>
-        <li>Prestaciones e indemnizaciones de la Seguridad Social</li>
-        <li>Indemnizaciones por traslado, suspensión o despido</li>
-        <li>Otras: regalos de empresa, etc.</li>
-      </ul>
-    </li>
-  </ul>
-</section>
-
-<section>
-  <p><strong>2. Deducciones</strong> (lo que se descuenta):</p>
-  <ul>
-    <li>Cuota a la <strong>Seguridad Social</strong></li>
-    <li>Retención del <strong>IRPF</strong></li>
-    <li>Anticipos cobrados</li>
-    <li>Valor de productos en especie</li>
-    <li>Otras (cuotas sindicales, etc.)</li>
-  </ul>
-</section>
-
-<h3>Conflictos laborales y su resolución</h3>
-
-<section>
-  <p>La <strong>formación continua</strong> y un buen <strong>clima laboral</strong> son ventajas competitivas que previenen la aparición de conflictos.</p>
-  <p>Un <strong>conflicto laboral</strong> es cualquier problema, disputa o desacuerdo que ocurra en el ambiente de trabajo por motivos relacionados con las tareas o funciones que se desempeñan en la empresa. Puede ser <strong>individual</strong> (entre un trabajador y su empresa) o <strong>colectivo</strong> (entre la empresa y un grupo de trabajadores, representados por sus delegados de personal o comités de empresa).</p>
-</section>
-
-<section>
-  <p><strong>Vías de resolución de conflictos laborales:</strong></p>
-  <ul>
-    <li><strong>Arbitraje</strong> — un moderador (normalmente de RR.HH.) escucha a ambas partes y propone solución. Para conflictos <strong>no graves</strong> que necesitan solución rápida.</li>
-    <li><strong>Facilitación</strong> — persona neutral que busca el diálogo para que los involucrados lleguen a un acuerdo. Conflictos de gravedad <strong>baja o media</strong>.</li>
-    <li><strong>Indagación</strong> — expertos en el tema valoran y recomiendan para encontrar una solución consensuada.</li>
-    <li><strong>Negociación</strong> — expertos median para lograr acuerdos. <strong>La técnica más empleada.</strong></li>
-    <li><strong>Mediación</strong> — persona neutral crea un ambiente de conciliación. Se usa cuando la negociación <strong>no llega a acuerdos</strong>.</li>
-  </ul>
-</section>
-
-<div class="vocab">
-  <div class="vocab-titulo">&#128214; Vocabulario</div>
-  <p><strong>Delegados de personal o comités de empresa:</strong> órganos representativos de los trabajadores. Comités de empresa: en empresas con al menos <strong>50 trabajadores</strong>. Si tienen menos, se designan <strong>delegados de personal</strong> en proporción al número de empleados.</p>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Asertividad:</strong> cualidad que nos permite expresar nuestras emociones de forma libre, sencilla y mesurada, defendiendo nuestra opinión sin agredir a nadie y sin consentir que nos agredan.
+    </div>
+  </div>
 </div>
 
-<h1>Tema 3. Función comercial y productiva</h1>
+<div class="card">
+  <div class="card-header">
+    <h3>2.4. La contratación y las relaciones laborales de la empresa <span class="page-ref">(pp. 47-48)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>contratación</strong> es el acto de formalizar una relación laboral siguiendo un marco normativo que garantiza intereses y derechos de ambas partes.</p>
+      <p>El acuerdo se refleja documentalmente en un <strong>contrato</strong>, que debe incluir estos formalismos:</p>
+      <ol>
+        <li><strong>Partes del contrato</strong> — determinar las partes del contrato de trabajo; además, deberá ser firmado por el director general de la empresa, el responsable directo y el trabajador.</li>
+        <li><strong>Domicilio social</strong> de la empresa.</li>
+        <li><strong>Categoría o grupo profesional</strong> del puesto.</li>
+        <li><strong>Duración</strong> — fecha de firma, comienzo y final (si es temporal).</li>
+        <li><strong>Convenio colectivo</strong> al que está acogido el puesto de trabajo. Según su ámbito puede ser: sectorial, estatal o nacional, autonómico, provincial, interprovincial, local o comarcal, de empresa individual, de empresa nacional, de empresa autonómica, de empresa local, o inferiores a la empresa.</li>
+        <li><strong>Jornada laboral</strong> — duración de la jornada laboral.</li>
+        <li><strong>Remuneración</strong> — detallando salario base, complementos a los que tiene derecho el trabajador y la periodicidad de los pagos.</li>
+        <li><strong>Vacaciones</strong>.</li>
+        <li><strong>Período de preaviso</strong> — para rescindir antes de la finalización.</li>
+        <li><strong>Período de prueba</strong>, si lo hubiere.</li>
+      </ol>
+    </section>
+    <section>
+      <p><strong>Contrato de trabajo:</strong> acuerdo entre empresario y trabajador para la prestación <strong>voluntaria</strong> de servicios laborales, por cuenta <strong>ajena</strong>, en régimen de <strong>dependencia</strong> (bajo dirección del empresario), a cambio de una <strong>retribución</strong>.</p>
+      <p><strong>Convenio colectivo:</strong> acuerdos entre representantes de los trabajadores (sindicatos) y representantes empresariales (patronal) dentro de un sector de actividad.</p>
+      <p>El marco negociador donde se negocia el convenio colectivo se conoce como <strong>negociación colectiva</strong>: proceso negociador entre asociaciones de trabajadores y asociaciones de empresarios.</p>
+    </section>
+    <section>
+      <p><strong>Tipos de contratos según su duración:</strong></p>
+      <ul>
+        <li><strong>Indefinido</strong> — sin fecha de finalización. También si se concatenan contratos temporales que superen 18 meses en un período de 24 meses. Jornada completa o parcial.</li>
+        <li><strong>Temporal</strong> — con fecha o hecho de finalización. Los más comunes:
+          <ul>
+            <li><strong>Eventual por circunstancias de la producción</strong> — para oscilaciones de actividad. Duración: 6 meses (ampliable a 1 año por convenio).</li>
+            <li><strong>Sustitución</strong> — cuando otro trabajador deja la empresa temporalmente con reserva de puesto.</li>
+          </ul>
+        </li>
+        <li><strong>Fijo discontinuo</strong> — indefinido pero con períodos sin trabajo ni salario (actividad estacional, temporada, contratas y subcontratas). Sin cotización a la Seguridad Social durante la inactividad.</li>
+        <li><strong>Formativos</strong> — incluyen plan formativo individual obligatorio:
+          <ul>
+            <li><strong>Formación en alternancia</strong> — combina formación + trabajo retribuido. Duración: como mínimo 3 meses a 2 años. Trabajo efectivo &lt; 65% (1er año) y &lt; 85% (2º año).</li>
+            <li><strong>Práctica profesional</strong> — para titulados universitarios o de FP. Duración: 6 meses a 1 año. No se permiten horas extras.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.4.1. Estatuto de los Trabajadores <span class="page-ref">(p. 48)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Texto refundido, última actualización: <strong>Ley 1/2015, de 23 de octubre</strong>. Recoge derechos y deberes laborales en <strong>92 artículos</strong> agrupados en 3 títulos:</p>
+      <ul>
+        <li><strong>Título I — Relación individual de trabajo:</strong> ámbito de aplicación, contratos, modificación, suspensión y extinción del contrato.</li>
+        <li><strong>Título II — Representación colectiva y reunión:</strong> actividad sindical y derecho de representación.</li>
+        <li><strong>Título III — Negociación colectiva y convenios colectivos.</strong></li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.4.2. Las políticas de igualdad y de inclusión en las empresas <span class="page-ref">(pp. 49-50)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Las <strong>políticas de igualdad</strong> en España obligan a:</p>
+      <ul>
+        <li>Registro de salarios en las empresas. Medianas y grandes: <strong>auditoría retributiva</strong> para garantizar igualdad salarial + <strong>Plan de Igualdad</strong> obligatorio.</li>
+        <li>Desde 2027, grandes empresas europeas: mínimo <strong>40% de mujeres</strong> en puestos directivos.</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Plan de Igualdad</strong> — medidas para eliminar obstáculos a la igualdad efectiva y erradicar la discriminación por sexo. Fases:</p>
+      <ol>
+        <li><strong>Estudio inicial</strong> — diagnóstico previo de la situación.</li>
+        <li><strong>Negociación</strong> — contacto con representantes de los trabajadores.</li>
+        <li><strong>Comisión</strong> — se crea una comisión negociadora.</li>
+      </ol>
+    </section>
+    <section>
+      <p><strong>Políticas de inclusión laboral</strong> — integración de trabajadores con vulnerabilidad (origen étnico, género, enfermedad, orientación sexual...). Empresas con +50 trabajadores: obligación de contratar al menos un <strong>2% de personas con diversidad funcional</strong>.</p>
+    </section>
+    <section>
+      <p><strong>Plan de Diversidad e Inclusión</strong> — etapas:</p>
+      <ol>
+        <li>Organizar <strong>sesiones</strong> sobre diversidad cultural.</li>
+        <li>Definir <strong>valores y principios</strong>.</li>
+        <li>Proyectar el <strong>modelo</strong> de gestión deseado.</li>
+        <li><strong>Elaboración</strong> del Plan.</li>
+        <li><strong>Actualización</strong> y sostenibilidad en el tiempo.</li>
+      </ol>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.4.3. Elementos básicos de las nóminas <span class="page-ref">(pp. 50-51)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p><strong>Nómina</strong> = documento justificante del pago de los salarios. Refleja la <strong>estructura salarial</strong>:</p>
+    </section>
+    <section>
+      <p><strong>1. Devengos</strong> (lo que se cobra):</p>
+      <ul>
+        <li><strong>Percepciones salariales:</strong>
+          <ul>
+            <li>Salario base</li>
+            <li>Complementos salariales (nocturnidad, peligrosidad, antigüedad...)</li>
+            <li>Horas extraordinarias</li>
+            <li>Salario en especie</li>
+          </ul>
+        </li>
+        <li><strong>Percepciones no salariales:</strong>
+          <ul>
+            <li>Dietas, gastos de viaje, locomoción</li>
+            <li>Prestaciones e indemnizaciones de la Seguridad Social</li>
+            <li>Indemnizaciones por traslado, suspensión o despido</li>
+            <li>Otras: regalos de empresa, etc.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>2. Deducciones</strong> (lo que se descuenta):</p>
+      <ul>
+        <li>Cuota a la <strong>Seguridad Social</strong></li>
+        <li>Retención del <strong>IRPF</strong></li>
+        <li>Anticipos cobrados</li>
+        <li>Valor de productos en especie</li>
+        <li>Otras (cuotas sindicales, etc.)</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2.4.4. Conflictos laborales y su resolución <span class="page-ref">(p. 52)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La <strong>formación continua</strong> y un buen <strong>clima laboral</strong> son ventajas competitivas que previenen la aparición de conflictos.</p>
+      <p>Un <strong>conflicto laboral</strong> es cualquier problema, disputa o desacuerdo que ocurra en el ambiente de trabajo por motivos relacionados con las tareas o funciones que se desempeñan en la empresa. Puede ser <strong>individual</strong> (entre un trabajador y su empresa) o <strong>colectivo</strong> (entre la empresa y un grupo de trabajadores, representados por sus delegados de personal o comités de empresa).</p>
+    </section>
+    <section>
+      <p><strong>Vías de resolución de conflictos laborales:</strong></p>
+      <ul>
+        <li><strong>Arbitraje</strong> — un moderador (normalmente de RR.HH.) escucha a ambas partes y propone solución. Para conflictos <strong>no graves</strong> que necesitan solución rápida.</li>
+        <li><strong>Facilitación</strong> — persona neutral que busca el diálogo para que los involucrados lleguen a un acuerdo. Conflictos de gravedad <strong>baja o media</strong>.</li>
+        <li><strong>Indagación</strong> — expertos en el tema valoran y recomiendan para encontrar una solución consensuada.</li>
+        <li><strong>Negociación</strong> — expertos median para lograr acuerdos. <strong>La técnica más empleada.</strong></li>
+        <li><strong>Mediación</strong> — persona neutral crea un ambiente de conciliación. Se usa cuando la negociación <strong>no llega a acuerdos</strong>.</li>
+      </ul>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <p><strong>Delegados de personal o comités de empresa:</strong> órganos representativos de los trabajadores. Comités de empresa: en empresas con al menos <strong>50 trabajadores</strong>. Si tienen menos, se designan <strong>delegados de personal</strong> en proporción al número de empleados.</p>
+    </div>
+  </div>
+</div>
+
+<h1 id="tema3">Tema 3. Función comercial y productiva</h1>
 <h2>La función productiva</h2>
 
-<h3>Proceso productivo</h3>
-
-<section>
-  <p>Es la planificación de actividades que realizan las empresas para obtener bienes o prestar servicios.</p>
-  <p>Los procesos productivos han evolucionado a lo largo de los años:</p>
-  <ol>
-    <li><strong>Producción artesanal</strong> (hasta mediados del s. XVIII) — talleres artesanales.</li>
-    <li><strong>Nacen las fábricas</strong> (1750-1840) — con la Revolución Industrial se pasa del taller artesanal a la fábrica.</li>
-    <li><strong>Producción en serie</strong> (1880-1960) — Segunda Revolución Industrial. Se desarrollan la industria eléctrica, del petróleo y del acero.</li>
-    <li><strong>Producción flexible</strong> (1960-actualidad) — el mercado se satura de productos estándar y surgen demandas específicas. Tras la crisis del petróleo de 1973 se impone la producción Toyota: pequeños lotes diferenciados.</li>
-  </ol>
-</section>
-
-<h3>Eficiencia: técnica y económica</h3>
-
-<section>
-  <p>Producir bien va ligado a tres conceptos:</p>
-  <ul>
-    <li><strong>Eficacia</strong> — producir el efecto deseado. "Hacer las cosas correctas".</li>
-    <li><strong>Eficiencia técnica</strong> — ser eficaz + mínimo empleo de recursos, sin recursos sobrantes.</li>
-    <li><strong>Eficiencia económica</strong> — de las alternativas eficaces técnicamente, elegir la de <strong>menor coste</strong>. "Hacer bien las cosas".</li>
-  </ul>
-  <p><strong>¿Cómo lograr mayor eficiencia?</strong> Mejoras tecnológicas, formación del capital humano, flexibilización de la organización y mediciones permanentes de eficiencia.</p>
-</section>
-
-<h3>Productividad media y productividad global</h3>
-
-<section>
-  <p>Para medir la eficiencia utilizamos la <strong>productividad</strong>: cantidad de producción obtenida en relación con la cantidad de cada factor productivo utilizado por unidad de tiempo.</p>
-  <p>Dos tipos de cálculo:</p>
-  <ul>
-    <li><strong>Productividad parcial</strong> — en unidades físicas. Relaciona el producto obtenido entre la cantidad de un factor empleado.</li>
-    <li><strong>Productividad global</strong> — en unidades monetarias. Relaciona el valor de la producción obtenida entre el valor de todos los factores productivos empleados.</li>
-  </ul>
-</section>
-
-<section>
-  <p>Para comparar la evolución o con otras empresas se usa la <strong>tasa de variación de la productividad</strong>:</p>
-  <p style="text-align:center; font-size:0.95rem;"><strong>TPG = (PG₁ - PG₀) / PG₀ × 100</strong></p>
-  <ul>
-    <li>Para evolución de la empresa: PG₁ = productividad del período actual, PG₀ = período anterior.</li>
-    <li>Para comparar con el sector: PG₁ = productividad de la empresa, PG₀ = media del sector.</li>
-  </ul>
-</section>
-
-<h3>Cadena de valor: actividades clave, recursos clave y asociaciones clave</h3>
-
-<div class="vocab">
-  <div class="vocab-titulo">&#128214; Vocabulario</div>
-  <strong>Ciclo de aprovisionamiento:</strong> tiempo que transcurre desde la realización de la compra y la entrega de la venta al cliente, tanto en empresas industriales como comerciales.
+<div class="card">
+  <div class="card-header">
+    <h3>2.1. Proceso productivo <span class="page-ref">(p. 66)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Es la planificación de actividades que realizan las empresas para obtener bienes o prestar servicios.</p>
+      <p>Los procesos productivos han evolucionado a lo largo de los años:</p>
+      <ol>
+        <li><strong>Producción artesanal</strong> (hasta mediados del s. XVIII) — talleres artesanales.</li>
+        <li><strong>Nacen las fábricas</strong> (1750-1840) — con la Revolución Industrial se pasa del taller artesanal a la fábrica.</li>
+        <li><strong>Producción en serie</strong> (1880-1960) — Segunda Revolución Industrial. Se desarrollan la industria eléctrica, del petróleo y del acero.</li>
+        <li><strong>Producción flexible</strong> (1960-actualidad) — el mercado se satura de productos estándar y surgen demandas específicas. Tras la crisis del petróleo de 1973 se impone la producción Toyota: pequeños lotes diferenciados.</li>
+      </ol>
+    </section>
+  </div>
 </div>
 
-<h3>Estructura de costes</h3>
-
-<section>
-  <p>Diferencia entre <strong>coste</strong> y <strong>gasto</strong>:</p>
-  <ul>
-    <li><strong>Coste</strong> — relacionado con la producción y fabricación del producto.</li>
-    <li><strong>Gasto</strong> — relacionado con la comercialización, administración y financiación.</li>
-  </ul>
-</section>
-
-<div class="vocab">
-  <div class="vocab-titulo">&#128214; Vocabulario</div>
-  <strong>Coste de oportunidad:</strong> recursos que dejamos de recibir por no tomar la mejor decisión posible. Cualquier decisión implica renunciar a los beneficios de la alternativa descartada.
+<div class="card">
+  <div class="card-header">
+    <h3>2.2. Eficiencia: técnica y económica <span class="page-ref">(pp. 66-67)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Producir bien va ligado a tres conceptos:</p>
+      <ul>
+        <li><strong>Eficacia</strong> — producir el efecto deseado. "Hacer las cosas correctas".</li>
+        <li><strong>Eficiencia técnica</strong> — ser eficaz + mínimo empleo de recursos, sin recursos sobrantes.</li>
+        <li><strong>Eficiencia económica</strong> — de las alternativas eficaces técnicamente, elegir la de <strong>menor coste</strong>. "Hacer bien las cosas".</li>
+      </ul>
+      <p><strong>¿Cómo lograr mayor eficiencia?</strong> Mejoras tecnológicas, formación del capital humano, flexibilización de la organización y mediciones permanentes de eficiencia.</p>
+    </section>
+  </div>
 </div>
 
-<section>
-  <p><strong>Costes según el comportamiento:</strong></p>
-  <ul>
-    <li><strong>Costes fijos (CF)</strong> — no dependen del nivel de producción, se mantienen constantes. Ej: compra e instalación de maquinaria.</li>
-    <li><strong>Costes variables (CV)</strong> — varían en función del nivel de producción; a más producción, mayor coste. Ej: mano de obra.
-      <br><strong>Coste Variable Unitario = Coste Variable total / Unidades de producto</strong>
-    </li>
-  </ul>
-  <p style="text-align:center; font-size:0.95rem;"><strong>Coste Total = CF + CV</strong></p>
-</section>
+<div class="card">
+  <div class="card-header">
+    <h3>2.3. Productividad media y productividad global <span class="page-ref">(pp. 67-68)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Para medir la eficiencia utilizamos la <strong>productividad</strong>: cantidad de producción obtenida en relación con la cantidad de cada factor productivo utilizado por unidad de tiempo.</p>
+      <p>Dos tipos de cálculo:</p>
+      <ul>
+        <li><strong>Productividad parcial</strong> — en unidades físicas. Relaciona el producto obtenido entre la cantidad de un factor empleado.</li>
+        <li><strong>Productividad global</strong> — en unidades monetarias. Relaciona el valor de la producción obtenida entre el valor de todos los factores productivos empleados.</li>
+      </ul>
+    </section>
+    <section>
+      <p>Para comparar la evolución o con otras empresas se usa la <strong>tasa de variación de la productividad</strong>:</p>
+      <div class="formula"><strong>TPG = (PG&#8321; - PG&#8320;) / PG&#8320; × 100</strong></div>
+      <ul>
+        <li>Para evolución de la empresa: PG&#8321; = productividad del período actual, PG&#8320; = período anterior.</li>
+        <li>Para comparar con el sector: PG&#8321; = productividad de la empresa, PG&#8320; = media del sector.</li>
+      </ul>
+    </section>
+  </div>
+</div>
 
-<section>
-  <p><strong>Costes según el período de tiempo:</strong></p>
-  <ul>
-    <li><strong>Corto plazo</strong> — el tiempo donde al menos un factor permanece constante con presencia de otros factores variables.</li>
-    <li><strong>Largo plazo</strong> — el tiempo necesario para que todos los factores de la producción sean variables.</li>
-  </ul>
-</section>
+<div class="card">
+  <div class="card-header">
+    <h3>2.4. Cadena de valor: actividades clave, recursos clave y asociaciones clave <span class="page-ref">(p. 69)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Ciclo de aprovisionamiento:</strong> tiempo que transcurre desde la realización de la compra y la entrega de la venta al cliente, tanto en empresas industriales como comerciales.
+    </div>
+  </div>
+</div>
 
-<section>
-  <p><strong>Costes según la imputación a productos:</strong></p>
-  <ul>
-    <li><strong>Costes directos</strong> — se identifican plenamente con un producto concreto. Ej: materia prima.</li>
-    <li><strong>Costes indirectos</strong> — no se pueden atribuir directamente a un producto, requieren criterio de reparto. Ej: alquiler.</li>
-  </ul>
-</section>
+<div class="card">
+  <div class="card-header">
+    <h3>2.5. Estructura de costes <span class="page-ref">(pp. 70-71)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Diferencia entre <strong>coste</strong> y <strong>gasto</strong>:</p>
+      <ul>
+        <li><strong>Coste</strong> — relacionado con la producción y fabricación del producto.</li>
+        <li><strong>Gasto</strong> — relacionado con la comercialización, administración y financiación.</li>
+      </ul>
+    </section>
+    <div class="vocab">
+      <div class="vocab-titulo">Vocabulario</div>
+      <strong>Coste de oportunidad:</strong> recursos que dejamos de recibir por no tomar la mejor decisión posible. Cualquier decisión implica renunciar a los beneficios de la alternativa descartada.
+    </div>
+    <section>
+      <p><strong>Costes según el comportamiento:</strong></p>
+      <ul>
+        <li><strong>Costes fijos (CF)</strong> — no dependen del nivel de producción, se mantienen constantes. Ej: compra e instalación de maquinaria.</li>
+        <li><strong>Costes variables (CV)</strong> — varían en función del nivel de producción; a más producción, mayor coste. Ej: mano de obra.</li>
+      </ul>
+      <div class="formula"><strong>Coste Variable Unitario = Coste Variable total / Unidades de producto</strong></div>
+      <div class="formula"><strong>Coste Total = CF + CV</strong></div>
+    </section>
+    <section>
+      <p><strong>Costes según el período de tiempo:</strong></p>
+      <ul>
+        <li><strong>Corto plazo</strong> — el tiempo donde al menos un factor permanece constante con presencia de otros factores variables.</li>
+        <li><strong>Largo plazo</strong> — el tiempo necesario para que todos los factores de la producción sean variables.</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Costes según la imputación a productos:</strong></p>
+      <ul>
+        <li><strong>Costes directos</strong> — se identifican plenamente con un producto concreto. Ej: materia prima.</li>
+        <li><strong>Costes indirectos</strong> — no se pueden atribuir directamente a un producto, requieren criterio de reparto. Ej: alquiler.</li>
+      </ul>
+    </section>
+    <section>
+      <p><strong>Costes según naturaleza:</strong> materias primas, personal, distribución, financieros, amortización, etc.</p>
+    </section>
+  </div>
+</div>
 
-<section>
-  <p><strong>Costes según naturaleza:</strong> materias primas, personal, distribución, financieros, amortización, etc.</p>
-</section>
+<div class="card">
+  <div class="card-header">
+    <h3>2.6. La calidad <span class="page-ref">(pp. 71-72)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La exigencia de la clientela obliga a reducir al mínimo errores y defectos. Para ello las empresas crean <strong>Departamentos de Calidad</strong>, que acreditan los niveles de calidad mediante métodos como el <strong>control estadístico de procesos</strong>.</p>
+      <p>Para fidelizar clientes las empresas implantan la norma <strong>ISO 9000</strong>, en concreto la <strong>ISO 9001</strong>, que es el conjunto de directrices que la empresa sigue en todo el proceso de fabricación para garantizar la calidad del producto final.</p>
+    </section>
+  </div>
+</div>
 
-<h3>La calidad</h3>
+<div class="card">
+  <div class="card-header">
+    <h3>2.7. Modelos de gestión y valoración de inventarios: PMP y FIFO <span class="page-ref">(pp. 72-74)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>La gestión de inventarios determina el número de pedidos, el momento de pedir y el sistema de gestión, buscando el <strong>volumen óptimo de pedido</strong> (cantidad que genera el mínimo coste de aprovisionamiento).</p>
+      <p>Tres conceptos clave:</p>
+      <ul>
+        <li><strong>Stock máximo</strong> — cantidad mayor de existencias que se puede mantener en el almacén.</li>
+        <li><strong>Stock mínimo o de seguridad</strong> — cantidad menor de existencias que se puede mantener sin riesgo de ruptura de stock.</li>
+        <li><strong>Punto de pedido</strong> — nivel de existencias en el que hay que hacer un nuevo pedido.</li>
+      </ul>
+      <div class="formula"><strong>P.P. = Consumo previsto durante el plazo de aprovisionamiento + stock de seguridad</strong></div>
+    </section>
+  </div>
+</div>
 
-<section>
-  <p>La exigencia de la clientela obliga a reducir al mínimo errores y defectos. Para ello las empresas crean <strong>Departamentos de Calidad</strong>, que acreditan los niveles de calidad mediante métodos como el <strong>control estadístico de procesos</strong>.</p>
-  <p>Para fidelizar clientes las empresas implantan la norma <strong>ISO 9000</strong>, en concreto la <strong>ISO 9001</strong>, que es el conjunto de directrices que la empresa sigue en todo el proceso de fabricación para garantizar la calidad del producto final.</p>
-</section>
+<div class="card">
+  <div class="card-header">
+    <h3>2.7.2. Valoración de existencias <span class="page-ref">(p. 74)</span></h3>
+    <button class="card-speak" title="Leer en voz alta"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+  </div>
+  <div class="card-body">
+    <section>
+      <p>Las existencias compradas se valoran al <strong>precio de adquisición</strong> (precio + gastos adicionales). Las producidas, al <strong>coste de producción</strong> (directos + indirectos).</p>
+      <p>Cuando hay varios precios de entrada, el Plan General Contable establece dos métodos:</p>
+      <ul>
+        <li><strong>PMP (Precio Medio Ponderado)</strong> — media ponderada de todos los precios de las existencias del almacén.</li>
+      </ul>
+      <div class="formula"><strong>PMP = (Cantidad × Precio) / Cantidades totales</strong></div>
+      <ul>
+        <li><strong>FIFO (First In, First Out)</strong> — primera entrada, primera salida. Las existencias que primero saldrán son las que entraron primero.</li>
+      </ul>
+    </section>
+  </div>
+</div>
 
-<h3>Modelos de gestión y valoración de inventarios: PMP y FIFO</h3>
+</div><!-- /studyContent -->
 
-<section>
-  <p>La gestión de inventarios determina el número de pedidos, el momento de pedir y el sistema de gestión, buscando el <strong>volumen óptimo de pedido</strong> (cantidad que genera el mínimo coste de aprovisionamiento).</p>
-  <p>Tres conceptos clave:</p>
-  <ul>
-    <li><strong>Stock máximo</strong> — cantidad mayor de existencias que se puede mantener en el almacén.</li>
-    <li><strong>Stock mínimo o de seguridad</strong> — cantidad menor de existencias que se puede mantener sin riesgo de ruptura de stock.</li>
-    <li><strong>Punto de pedido</strong> — nivel de existencias en el que hay que hacer un nuevo pedido.</li>
-  </ul>
-  <p style="text-align:center; font-size:0.95rem;"><strong>P.P. = Consumo previsto durante el plazo de aprovisionamiento + stock de seguridad</strong></p>
-</section>
+<div id="examView">
+  <div class="ex-warning" id="exVoiceWarning">
+    No se ha encontrado la voz "Microsoft Alvaro Online (Natural)". Abre esta página en <strong>Microsoft Edge</strong>.
+  </div>
 
-<h3>Valoración de existencias</h3>
+  <div class="exam-topic-selector" id="exTopicSelector">
+    <button class="exam-topic-btn active" data-topic="tema1">1</button>
+    <button class="exam-topic-btn active" data-topic="tema2">2</button>
+    <button class="exam-topic-btn active" data-topic="tema3">3</button>
+    <button class="exam-btn-go" id="exBtnStart" title="Empezar">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+  </div>
 
-<section>
-  <p>Las existencias compradas se valoran al <strong>precio de adquisición</strong> (precio + gastos adicionales). Las producidas, al <strong>coste de producción</strong> (directos + indirectos).</p>
-  <p>Cuando hay varios precios de entrada, el Plan General Contable establece dos métodos:</p>
-  <ul>
-    <li><strong>PMP (Precio Medio Ponderado)</strong> — media ponderada de todos los precios de las existencias del almacén.
-      <br><strong>PMP = (Cantidad × Precio) / Cantidades totales</strong>
-    </li>
-    <li><strong>FIFO (First In, First Out)</strong> — primera entrada, primera salida. Las existencias que primero saldrán son las que entraron primero.</li>
-  </ul>
-</section>
+  <div class="exam-session" id="exSession">
+    <div class="ex-progress-row">
+      <div class="ex-progress-text" id="exProgressText"></div>
+      <div class="ex-score-live">
+        <span id="exLiveScore">0 / 10</span>
+      </div>
+    </div>
+    <div class="ex-progress-bar"><div class="ex-progress-fill" id="exProgressFill"></div></div>
+
+    <div class="ex-toolbar" id="exToolbar">
+      <button class="ex-icon-btn home" id="exBtnHome" title="Volver al temario">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </button>
+      <div class="ex-toolbar-sep"></div>
+      <button class="ex-icon-btn" id="exBtnMute" title="Silenciar voz">
+        <svg viewBox="0 0 24 24" id="exMuteIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
+      <button class="ex-icon-btn" id="exBtnThink" title="Tiempo para pensar (+5s)">
+        <span id="exThinkLabel">15</span>
+      </button>
+      <button class="ex-icon-btn reveal disabled" id="exBtnReveal" title="Mostrar respuesta">
+        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </button>
+      <div class="ex-toolbar-sep"></div>
+      <button class="ex-icon-btn a-correct disabled" id="exBtnCorrect" data-score="correct" title="Lo sabía">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      </button>
+      <button class="ex-icon-btn a-partial disabled" id="exBtnPartial" data-score="partial" title="A medias">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><text x="12" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" font-family="sans-serif">~</text></svg>
+      </button>
+      <button class="ex-icon-btn a-wrong disabled" id="exBtnWrong" data-score="wrong" title="No lo sabía">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+
+    <div class="ex-section-label" id="exSectionLabel"></div>
+
+    <div class="ex-panel ex-panel-q" id="exPanelQ">
+      <div class="ex-panel-header" id="exPanelQHeader">
+        <span>Pregunta</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="ex-panel-body" id="exPanelQBody"></div>
+    </div>
+
+    <div class="ex-panel ex-panel-a" id="exPanelA" style="display:none">
+      <div class="ex-panel-header" id="exPanelAHeader">
+        <span>Respuesta</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="ex-panel-body" id="exPanelABody"></div>
+    </div>
+  </div>
+
+  <div class="ex-results" id="exResults">
+    <h2>Sesión completada</h2>
+    <div class="ex-score-bar-container">
+      <span class="ex-score-label" style="color:#2e7d32">Lo sabía</span>
+      <div class="ex-score-bar"><div class="ex-score-bar-fill correct" id="exBarCorrect" style="width:0"></div></div>
+      <span class="ex-score-pct" id="exPctCorrect">0%</span>
+    </div>
+    <div class="ex-score-bar-container">
+      <span class="ex-score-label" style="color:#b78200">A medias</span>
+      <div class="ex-score-bar"><div class="ex-score-bar-fill partial" id="exBarPartial" style="width:0"></div></div>
+      <span class="ex-score-pct" id="exPctPartial">0%</span>
+    </div>
+    <div class="ex-score-bar-container">
+      <span class="ex-score-label" style="color:#d32f2f">No lo sabía</span>
+      <div class="ex-score-bar"><div class="ex-score-bar-fill wrong" id="exBarWrong" style="width:0"></div></div>
+      <span class="ex-score-pct" id="exPctWrong">0%</span>
+    </div>
+    <div class="ex-results-section" id="exReviewSection" style="display:none">
+      <h3>Debes repasar:</h3>
+      <ul class="ex-review-list" id="exReviewList"></ul>
+    </div>
+    <div class="ex-results-actions">
+      <button class="exam-btn exam-btn-start" id="exBtnRetry">Repetir todo</button>
+      <button class="exam-btn" id="exBtnRetryWeak" style="display:none;background:#e0e0e0;color:#222">Repetir fallos</button>
+      <button class="exam-btn" id="exBtnBackResults" style="background:#555;color:#fff">Volver al temario</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+const QUESTIONS = [
+  { topic: "tema1", section: "Tema 1 — Introducción", question: "La empresa nace y se desarrolla con el mercado en cuatro fases históricas. Nómbralas y explica brevemente cada una.", answer: "Etapa mercantilista: actividad comercial, compraventa y préstamo, impulso del comercio internacional. Capitalismo industrial: Primera y Segunda Revolución Industrial, producción a gran escala y grandes empresas. Capitalismo financiero: último tercio del siglo veinte, aparece el monopolio, empresas dominadas por los bancos, nace la multinacional. La empresa como sistema: la empresa es una realidad económica y social, el empresario organiza y dirige." },
+  { topic: "tema1", section: "Tema 1 — Funciones sociales", question: "Alfred Marshall separó el concepto de empresariado del de propiedad. El empresariado realiza cuatro funciones sociales. ¿Cuáles son?", answer: "Uno: produce bienes y servicios que satisfacen necesidades de la sociedad. Dos: crea empleo y genera riqueza, incrementando el bienestar. Tres: impulsa innovaciones que posibilitan el desarrollo económico. Cuatro: anticipa el producto social y asume riesgo, pagando por anticipado los factores de producción sin conocer los resultados." },
+  { topic: "tema1", section: "Tema 1 — Perfiles emprendedores", question: "Existen cuatro perfiles emprendedores. Nómbralos y di la cualidad principal de cada uno.", answer: "Perfil directivo: saber liderar equipos. Perfil técnico: hiperespecialización, aporta conocimientos e innovación. Perfil comercial: dominio en ventas, no siente aversión al riesgo, maneja redes de contactos. Perfil visionario: descubre oportunidades de negocio, asume riesgos, toma decisiones rápidas e intuitivas, crea equipos de alto rendimiento." },
+  { topic: "tema1", section: "Tema 1 — Emprendeduría social", question: "¿Qué es el emprendimiento social y sostenible? ¿En qué tres dimensiones se sitúa el desarrollo sostenible?", answer: "Es un tipo de startup guiado por una misión social, ubicado entre las empresas con fines de lucro y las organizaciones sin fines de lucro. El desarrollo sostenible se sitúa en la intersección de tres dimensiones: social, económico y medioambiental." },
+  { topic: "tema1", section: "Tema 1 — Empresa: elementos", question: "La empresa tiene cuatro elementos o componentes fundamentales. ¿Cuáles son? Además, nombra las cinco áreas funcionales.", answer: "Los cuatro elementos son: capital físico, que son máquinas, mobiliario, oficinas y fábricas. Capital humano, todas las personas. Rasgos intangibles como marca, experiencia y conocimiento. Y capital financiero, el dinero. Las cinco áreas funcionales son: dirección, gestión económica y financiera, comercialización, producción y recursos humanos." },
+  { topic: "tema1", section: "Tema 1 — Objetivos", question: "Los objetivos de una empresa dependen de su tipo. Explica qué buscan las empresas privadas, públicas, grandes y pequeñas. Además, ¿en qué cuatro clases se agrupan los objetivos?", answer: "Las privadas buscan maximizar beneficios. Las públicas, equilibrio financiero. Las grandes, maximizar crecimiento a medio y largo plazo. Las pequeñas, sobrevivir. Las cuatro clases son: maximización del beneficio o rentabilidad, crecimiento y poder de mercado, estabilidad y adaptabilidad al medio, y naturaleza social o servicio a la colectividad." },
+  { topic: "tema1", section: "Tema 1 — Clasificación", question: "Las empresas se clasifican según cinco criterios. Nómbralos y da al menos dos categorías de cada uno.", answer: "Sector de actividad: primario, secundario, terciario. Tamaño: micro, pequeña, mediana, grande. Propiedad del capital: privada, pública, mixta. Ámbito de actuación: local, nacional, internacional. Forma jurídica: personalidad física como empresario individual, o personalidad jurídica como personalistas, capitalistas o de interés social." },
+  { topic: "tema1", section: "Tema 1 — Localización", question: "La localización empresarial tiene factores diferentes según sea industrial o comercial. Nombra al menos tres factores de cada tipo.", answer: "Localización industrial: acceso a materias primas al menor coste, mano de obra cualificada, accesibilidad y buenas comunicaciones, y ayudas o beneficios fiscales. Localización comercial: buena localización en condiciones óptimas, proximidad al público objetivo, visibilidad del local, facilidad de acceso y actividades complementarias cercanas." },
+  { topic: "tema1", section: "Tema 1 — Dimensión", question: "¿Qué es la dimensión empresarial? ¿Qué es el tamaño óptimo? ¿Qué dos elementos condicionan la dimensión?", answer: "La dimensión es el nivel máximo de capacidad productiva de una empresa. El tamaño óptimo es aquel en el que la empresa no es ni demasiado grande, generando costes que no puede mantener, ni demasiado pequeña, desperdiciando oportunidades de mercado. Los dos elementos que condicionan la dimensión son la demanda y las economías de escala." },
+  { topic: "tema1", section: "Tema 1 — Crecimiento", question: "Existen dos modalidades de crecimiento empresarial. ¿Cuáles son? Dentro del crecimiento externo, ¿cuál es la diferencia entre cooperación y concentración? Pon un ejemplo de cada.", answer: "Crecimiento interno: inversiones propias para mejorar la capacidad productiva, incluye expansión y diversificación. Crecimiento externo: adquirir, fusionarse o colaborar con otras empresas. La cooperación mantiene la independencia de las empresas, por ejemplo una joint venture como Nestlé con Coca-Cola. La concentración implica pérdida de independencia, por ejemplo una fusión como BBV más Argentaria igual a BBVA." },
+  { topic: "tema1", section: "Tema 1 — PYME y multinacionales", question: "Las pymes son fundamentales en la economía española. ¿Qué porcentaje del tejido empresarial representan? Nombra tres oportunidades y tres problemas de las pymes.", answer: "Representan el noventa y nueve coma ocho por ciento del tejido empresarial y generan el sesenta y seis coma cuatro por ciento del empleo. Oportunidades: se adaptan mejor a los cambios, conocen mejor al cliente y sus nichos, y toman decisiones más rápidas. Problemas: financiación limitada, producen con mayor coste al no tener economías de escala, y no tienen poder de negociación con clientes y proveedores." },
+  { topic: "tema1", section: "Tema 1 — Marco jurídico", question: "La normativa empresarial se basa en tres ramas del derecho. ¿Cuáles son y de qué se ocupa cada una?", answer: "Derecho mercantil: regula la actividad económica empresarial a través del Código de Comercio, incluyendo tipología empresarial, contabilidad y publicidad. Derecho laboral: tutela del trabajo humano, se ocupa del derecho individual y colectivo del trabajo, Seguridad Social y derecho procesal laboral. Derecho fiscal: obtener ingresos para cubrir gastos públicos, mediante tributos que son tasas, contribuciones e impuestos." },
+  { topic: "tema1", section: "Tema 1 — Formas jurídicas", question: "¿Cuál es la diferencia principal entre una Sociedad Limitada y una Sociedad Anónima en cuanto a capital mínimo, cómo se divide el capital y quién lo suele utilizar?", answer: "La S.L. tiene un capital mínimo de uno a tres mil euros, dividido en participaciones sociales, y es la forma más habitual entre pymes. La S.A. tiene un capital mínimo de sesenta mil euros con un desembolso mínimo del veinticinco por ciento, dividido en acciones libremente transmisibles que pueden cotizar en bolsa, ideal para grandes empresas que necesitan captar grandes cantidades de capital." },
+  { topic: "tema1", section: "Tema 1 — Formas jurídicas", question: "¿Qué es una sociedad cooperativa? Nombra al menos cuatro de sus características y explica cómo se organiza su gobierno.", answer: "Es una sociedad constituida por personas que se asocian en régimen de libre adhesión y baja voluntaria para realizar actividades empresariales con estructura democrática. Características: mínimo tres socios, responsabilidad limitada a aportaciones, gestión democrática independiente del capital, capital social variable, y beneficios según actividad cooperativizada. Gobierno: Asamblea General como órgano soberano, Consejo Rector para administración y representación, e Interventor o Comisión de vigilancia." },
+  { topic: "tema1", section: "Tema 1 — Estructuras organizativas", question: "Mintzberg definió cinco niveles en la estructura organizativa de una empresa. ¿Cuáles son?", answer: "Cumbre estratégica: alta dirección, toma las decisiones globales. Línea media: dirección intermedia, enlaza la cumbre con las operaciones. Núcleo de operaciones: operarios y demás trabajadores. Tecnoestructura: trabajadores que diseñan y adaptan la estructura al entorno. Y personal de apoyo o staff: personal especializado que asesora o colabora, por ejemplo un gabinete jurídico." },
+  { topic: "tema1", section: "Tema 1 — Modelos organizativos", question: "Existen cinco modelos de estructuras organizativas. Nombra tres de ellos y explica sus ventajas e inconvenientes.", answer: "Modelo lineal o jerárquico: basado en la unidad de mando, con simplicidad y decisiones rápidas, pero con excesiva concentración de autoridad y rigidez. Modelo funcional: especialistas para cada nivel, fomenta la especialización, pero con riesgo de órdenes contradictorias. Modelo matricial: combina funciones y proyectos, es flexible con equipos multidisciplinares, pero requiere mayor esfuerzo de coordinación y puede generar conflictos entre directores." },
+  { topic: "tema1", section: "Tema 1 — Cultura de empresa", question: "¿Qué es la cultura de empresa y cuáles son los tres elementos que la determinan?", answer: "Se refiere a un conjunto de formas de proceder y de pensar que caracterizan a los miembros de una empresa. Su objetivo es lograr la cohesión entre todos los miembros. Los tres elementos son: misión, que describe la razón de ser de la empresa, por qué existe. Visión, que establece los objetivos, que deben ser medibles y alcanzables. Y valores, que describen la personalidad de la empresa." },
+  { topic: "tema1", section: "Tema 1 — Entorno empresarial", question: "La empresa es un sistema abierto que interactúa con su entorno. ¿Cuál es la diferencia entre entorno general y entorno específico?", answer: "El entorno general o macroentorno es externo a la empresa y no puede controlarlo. Incluye factores políticos, económicos, socioculturales, tecnológicos, ecológicos y legales. Se analiza con el método PESTEL. El entorno específico o microentorno afecta de manera directa a la empresa e incluye proveedores, clientes, competencia, intermediarios y prescriptores." },
+  { topic: "tema1", section: "Tema 1 — Innovación", question: "El Manual de Oslo de 2005 define cuatro tipos de innovación. ¿Cuáles son?", answer: "De producto: bien o servicio nuevo o significativamente mejorado. De proceso: proceso de producción o distribución nuevo o mejorado. De mercadotecnia: nuevo método de comercialización como diseño, envasado, posicionamiento o tarificación. Y de organización: nuevo método organizativo en las prácticas y relaciones exteriores." },
+  { topic: "tema2", section: "Tema 2 — Modelo de negocio", question: "¿Cuál es la diferencia entre modelo de negocio y plan de negocio?", answer: "El modelo de negocio es una herramienta que aporta soluciones a una necesidad del mercado, distinguiendo el valor del producto, qué se necesita para insertarlo y a qué clientes se dirige. El plan de negocio es un documento que diseña y planifica un nuevo proyecto comercial: una guía detallada con objetivos, metodologías, formas de trabajo y organización de actividades internas." },
+  { topic: "tema2", section: "Tema 2 — Planificación", question: "El Plan de Empresa tiene cinco elementos mínimos. ¿Cuáles son? Además, ¿cuál es la diferencia entre planificación estratégica y táctica?", answer: "Los cinco elementos son: objetivos, que son lo que se desea lograr. Políticas, principios que determinan la conducta. Procedimientos, guías con tareas y pasos. Reglas, normas esenciales como seguridad e higiene. Y presupuestos, documentos con ingresos y gastos previstos. La planificación estratégica es a medio y largo plazo y afecta a todos los departamentos. La táctica es a corto plazo y solo afecta a determinados departamentos." },
+  { topic: "tema2", section: "Tema 2 — Dirección", question: "Existen tres niveles de dirección tradicionales en una empresa. ¿Cuáles son y qué tipo de decisiones toma cada uno?", answer: "Alta dirección: consejos de administración y directores de áreas, toman decisiones trascendentales a largo plazo como fusiones o cambios de producción. Dirección intermedia: directores de fábricas, gerentes y jefes de división, logran los planes de la alta dirección y controlan resultados. Dirección operativa: jefes de obra, secciones y capataces, son mandos directos de los trabajadores y asignan tareas concretas." },
+  { topic: "tema2", section: "Tema 2 — Dirección", question: "Mintzberg definió cinco niveles en la estructura organizativa. ¿Cuáles son y qué función tiene cada uno?", answer: "Cumbre estratégica: alta dirección, toma las decisiones globales. Línea media: dirección intermedia, enlaza la cumbre con las operaciones. Núcleo de operaciones: operarios y demás trabajadores. Tecnoestructura: trabajadores que diseñan y adaptan la estructura al entorno. Y personal de apoyo o staff: personal especializado que asesora o colabora, como un gabinete jurídico." },
+  { topic: "tema2", section: "Tema 2 — Estructuras organizativas", question: "¿Cuál es la diferencia entre organización informal y organización formal? Dentro de la formal, ¿qué dos estilos de dirección existen?", answer: "La organización informal son relaciones espontáneas entre personas que comparten trabajos, donde los líderes surgen por afinidad o carácter. La organización formal está determinada por la dirección. Tiene dos estilos: autocrático, con comunicación vertical de arriba abajo y decisiones centralizadas, y participativo, con descentralización, decisiones consensuadas y el líder como servidor que implica a los trabajadores." },
+  { topic: "tema2", section: "Tema 2 — Organigramas", question: "¿Qué es un organigrama, cuáles son sus tres elementos esenciales y en qué dos tipos se clasifican?", answer: "Un organigrama es una representación gráfica simplificada de la estructura organizativa formal de una empresa, mostrando puestos, funciones, niveles de autoridad y relaciones. Sus tres elementos esenciales son: deben ser claros con figuras bien separadas, el número de cuadros será limitado empezando por cargos de mayor responsabilidad, y preferentemente con nombres de funciones, no de personas. Se clasifican en horizontales, de izquierda a derecha, y verticales, de arriba abajo." },
+  { topic: "tema2", section: "Tema 2 — División del trabajo", question: "Explica la relación entre división del trabajo, especialización y departamentalización. ¿Qué es un área funcional?", answer: "La división del trabajo fracciona las actividades de un proceso productivo. La especialización es la asignación de esas tareas a trabajadores con aptitudes concretas. La especialización hace que las empresas crezcan y se hagan más complejas, dando lugar a la departamentalización, que es agrupar tareas bajo un mismo criterio. Un área funcional es un departamento que comparte tareas y objetivos; las más comunes son dirección, producción, finanzas y recursos humanos." },
+  { topic: "tema2", section: "Tema 2 — Modelos organizativos", question: "Nombra los cinco modelos de estructuras organizativas y describe las ventajas e inconvenientes de al menos dos de ellos.", answer: "Los cinco son: lineal o jerárquico, funcional, en línea y asesoramiento o staff, matricial y Teal. El lineal tiene simplicidad y decisiones rápidas pero excesiva concentración de autoridad y rigidez. El matricial combina funciones y proyectos, es flexible con equipos multidisciplinares y comunicación fluida, pero requiere mayor coordinación y puede generar conflictos entre directores. El Teal busca el bienestar y felicidad de los trabajadores, mejora relaciones sociales pero pocas empresas se atreven a implantarlo." },
+  { topic: "tema2", section: "Tema 2 — Cultura de empresa", question: "¿Qué es la cultura de empresa y cuáles son los tres elementos que la determinan?", answer: "Se refiere a un conjunto de formas de proceder y de pensar que caracterizan a los miembros de una empresa. Su objetivo es lograr la cohesión entre todos los miembros. Los tres elementos son: misión, la razón de ser de la empresa y por qué existe. Visión, los objetivos que deben ser medibles y alcanzables. Y valores, la personalidad de la empresa y cómo son las personas que la forman." },
+  { topic: "tema2", section: "Tema 2 — Selección de personal", question: "La gestión de recursos humanos sigue un proceso de evaluación y selección de personal. ¿Cuáles son las fases típicas de un proceso de selección?", answer: "Las fases típicas son: primero la descripción del puesto y definición del perfil. Luego la convocatoria y recepción de candidaturas. Después la preselección de currículums. A continuación las pruebas de selección como entrevistas, tests psicotécnicos o pruebas prácticas. Y finalmente la decisión final y contratación." },
+  { topic: "tema2", section: "Tema 2 — Formación", question: "Cuando una empresa quiere implantar metodologías ágiles como Scrum, debe hacerlo de forma gradual. Nombra las tres situaciones que se deben evitar al iniciar la implantación.", answer: "Uno: que las tareas las decida un comité. Dos: que el responsable no tenga autoridad ni ejerza liderazgo. Tres: que el responsable desarrolle otras actividades profesionales al mismo tiempo." },
+  { topic: "tema2", section: "Tema 2 — Habilidades laborales", question: "Las habilidades que demanda el mercado de trabajo son estrategias de conducta y destrezas que mejoran la empleabilidad. Dime al menos seis de estas habilidades.", answer: "Capacidad de negociación, creatividad, dinamismo, empatía, iniciativa, inteligencia emocional, inteligencia social, liderazgo, pensamiento crítico, resiliencia y trabajo en equipo. Con seis de estas, perfecto." },
+  { topic: "tema2", section: "Tema 2 — Habilidades laborales", question: "Existen dos tipos de inteligencia especialmente relevantes en el ámbito laboral. ¿Cuál es la diferencia entre inteligencia emocional e inteligencia social?", answer: "La inteligencia emocional consiste en manejar los propios sentimientos y emociones para dirigir los pensamientos. La inteligencia social es la capacidad de comunicarse y relacionarse con otros con empatía y asertividad." },
+  { topic: "tema2", section: "Tema 2 — Contratación", question: "Un contrato de trabajo es un acuerdo entre empresario y trabajador que tiene cuatro características esenciales. ¿Cuáles son?", answer: "Voluntariedad, es decir, no hay coacción. Ajenidad, porque se trabaja por cuenta ajena. Dependencia, bajo la dirección del empresario. Y retribución, a cambio de una remuneración." },
+  { topic: "tema2", section: "Tema 2 — Contratación", question: "Los contratos de trabajo se clasifican según su duración. Nombra los cuatro tipos y explica brevemente cada uno.", answer: "Indefinido: sin fecha de finalización. Temporal: con fecha o hecho de finalización, incluye el eventual y el de sustitución. Fijo discontinuo: indefinido pero con períodos de inactividad, típico de trabajos estacionales. Y formativos: combinan formación con trabajo, incluyen el de alternancia y el de práctica profesional." },
+  { topic: "tema2", section: "Tema 2 — Contratación", question: "El convenio colectivo es un acuerdo entre representantes de trabajadores y empresarios. ¿Qué es la negociación colectiva y qué es un convenio colectivo?", answer: "La negociación colectiva es el proceso negociador entre asociaciones de trabajadores, generalmente sindicatos, y asociaciones de empresarios, la patronal. El convenio colectivo es el resultado de esa negociación: los acuerdos alcanzados dentro de un sector de actividad." },
+  { topic: "tema2", section: "Tema 2 — Estatuto de los Trabajadores", question: "El Estatuto de los Trabajadores es un texto legal fundamental para las relaciones laborales en España. ¿En cuántos artículos y títulos se organiza? Nombra los tres títulos.", answer: "Tiene 92 artículos agrupados en tres títulos. Título uno: relación individual de trabajo, que incluye contratos y su modificación, suspensión y extinción. Título dos: representación colectiva y reunión de los trabajadores. Título tres: negociación colectiva y convenios colectivos." },
+  { topic: "tema2", section: "Tema 2 — Nóminas", question: "La nómina es el documento justificante del pago de los salarios y tiene dos grandes bloques. ¿Cuáles son y qué incluye cada uno?", answer: "Devengos: lo que el trabajador cobra. Incluyen percepciones salariales como el salario base, complementos y horas extra, y percepciones no salariales como dietas e indemnizaciones. Deducciones: lo que se descuenta. Incluyen la cuota a la Seguridad Social, la retención del IRPF, anticipos y otras como cuotas sindicales." },
+  { topic: "tema2", section: "Tema 2 — Conflictos laborales", question: "Los conflictos laborales son problemas o desacuerdos que ocurren en el ambiente de trabajo. Nombra las cinco vías de resolución de conflictos laborales.", answer: "Arbitraje: un moderador escucha a ambas partes y propone solución, para conflictos no graves. Facilitación: persona neutral que busca el diálogo, para conflictos de gravedad baja o media. Indagación: expertos valoran y recomiendan. Negociación: expertos median para lograr acuerdos, es la más empleada. Y mediación: persona neutral que crea ambiente de conciliación, se usa cuando la negociación fracasa." },
+  { topic: "tema2", section: "Tema 2 — Igualdad e inclusión", question: "Las políticas de igualdad obligan a las empresas a tomar medidas concretas. ¿Qué es un Plan de Igualdad y cuáles son sus tres fases?", answer: "Es un conjunto de medidas evaluables para eliminar obstáculos a la igualdad entre hombres y mujeres y erradicar la discriminación por sexo. Sus tres fases son: estudio inicial con diagnóstico previo, negociación con los representantes de los trabajadores, y creación de una comisión negociadora." },
+  { topic: "tema3", section: "Tema 3 — Proceso productivo", question: "Los procesos productivos han evolucionado a lo largo de la historia en cuatro grandes etapas. Descríbelas con sus fechas aproximadas.", answer: "Producción artesanal, hasta mediados del siglo dieciocho, en talleres artesanales. Nacen las fábricas, de 1750 a 1840, con la Revolución Industrial. Producción en serie, de 1880 a 1960, en la Segunda Revolución Industrial. Y producción flexible, de 1960 hasta hoy, con pequeños lotes diferenciados, como el modelo Toyota tras la crisis del petróleo de 1973." },
+  { topic: "tema3", section: "Tema 3 — Eficiencia", question: "Producir bien va ligado a tres conceptos clave que debemos distinguir. ¿Cuál es la diferencia entre eficacia, eficiencia técnica y eficiencia económica?", answer: "Eficacia es producir el efecto deseado, hacer las cosas correctas. Eficiencia técnica es ser eficaz con el mínimo empleo de recursos, sin recursos sobrantes. Eficiencia económica es elegir, de las alternativas técnicamente eficientes, la de menor coste. Hacer bien las cosas." },
+  { topic: "tema3", section: "Tema 3 — Productividad", question: "La productividad mide la eficiencia y se puede calcular de dos formas. ¿Cuál es la diferencia entre productividad parcial y productividad global? ¿Y cómo se calcula la tasa de variación?", answer: "La productividad parcial se mide en unidades físicas, relacionando el producto obtenido con la cantidad de un solo factor. La productividad global se mide en unidades monetarias, relacionando el valor de toda la producción con el valor de todos los factores. La tasa de variación es: productividad actual menos productividad anterior, dividido por productividad anterior, por cien." },
+  { topic: "tema3", section: "Tema 3 — Costes", question: "Los costes de una empresa se pueden clasificar de varias formas. Explica la diferencia entre costes fijos y costes variables, y entre costes directos e indirectos.", answer: "Los costes fijos no dependen del nivel de producción, se mantienen constantes, por ejemplo la maquinaria. Los costes variables crecen con la producción, por ejemplo la mano de obra. El coste total es la suma de ambos. Los costes directos se identifican con un producto concreto, como la materia prima. Los indirectos no se pueden atribuir a un producto, necesitan criterio de reparto, como el alquiler." },
+  { topic: "tema3", section: "Tema 3 — Costes", question: "En economía, corto plazo y largo plazo no se refieren simplemente a meses o años. ¿Qué significan en términos económicos?", answer: "El corto plazo es el período en el que al menos un factor de producción permanece constante, aunque otros puedan variar. El largo plazo es el tiempo necesario para que todos los factores de producción sean variables, es decir, la empresa puede modificar absolutamente todo." },
+  { topic: "tema3", section: "Tema 3 — Costes", question: "El coste de oportunidad es un concepto fundamental en la toma de decisiones económicas. ¿Qué es el coste de oportunidad? ¿Y cuál es la diferencia entre coste y gasto?", answer: "El coste de oportunidad son los recursos que dejamos de recibir por no tomar la mejor decisión posible. Toda decisión implica renunciar a los beneficios de la alternativa descartada. La diferencia entre coste y gasto: el coste está relacionado con la producción y fabricación, mientras que el gasto se relaciona con la comercialización, administración y financiación." },
+  { topic: "tema3", section: "Tema 3 — Calidad e inventarios", question: "Las empresas gestionan la calidad y los inventarios con herramientas y métodos específicos. ¿Qué es la norma ISO 9001? ¿Y cuáles son los dos métodos de valoración de existencias del Plan General Contable?", answer: "La ISO 9001 es el conjunto de directrices que la empresa sigue en todo el proceso de fabricación para garantizar la calidad del producto final. Los dos métodos de valoración son: PMP, precio medio ponderado, que calcula la media ponderada de todos los precios de las existencias. Y FIFO, primera entrada primera salida, donde las existencias que salieron primero son las que entraron primero." },
+  { topic: "tema3", section: "Tema 3 — Inventarios", question: "La gestión de inventarios busca el volumen óptimo de pedido. ¿Qué es el stock de seguridad, el stock máximo y el punto de pedido? ¿Cómo se calcula el punto de pedido?", answer: "El stock máximo es la cantidad mayor de existencias que se puede mantener en almacén. El stock de seguridad es la cantidad mínima para evitar ruptura de stock. El punto de pedido es el nivel de existencias en el que hay que hacer un nuevo pedido. Se calcula como: consumo previsto durante el plazo de aprovisionamiento más el stock de seguridad." }
+];
+
+const studyContent = document.getElementById('studyContent');
+const topBar = document.getElementById('topBar');
+const examView = document.getElementById('examView');
+
+// Exam state
+let exQuestions = [];
+let exIndex = 0;
+let exRunning = false;
+let exThinkTimer = null;
+let exAssessResolve = null;
+let exRevealResolve = null;
+let exRevealed = false;
+let exResults = [];
+let exCountingDown = false;
+let exCountdownRem = 0;
+const exThinkCycle = [15, 20, 25, 30];
+let exThinkIdx = 0;
+let exMuted = false;
+
+// DOM
+const exBtnStart = document.getElementById('exBtnStart');
+const exSession = document.getElementById('exSession');
+const exBtnThink = document.getElementById('exBtnThink');
+const exThinkLabel = document.getElementById('exThinkLabel');
+const exBtnMute = document.getElementById('exBtnMute');
+const exMuteIcon = document.getElementById('exMuteIcon');
+const exBtnReveal = document.getElementById('exBtnReveal');
+const exBtnCorrect = document.getElementById('exBtnCorrect');
+const exBtnPartial = document.getElementById('exBtnPartial');
+const exBtnWrong = document.getElementById('exBtnWrong');
+const exBtnHome = document.getElementById('exBtnHome');
+const exProgressText = document.getElementById('exProgressText');
+const exProgressFill = document.getElementById('exProgressFill');
+const exSectionLabel = document.getElementById('exSectionLabel');
+const exPanelQ = document.getElementById('exPanelQ');
+const exPanelQBody = document.getElementById('exPanelQBody');
+const exPanelA = document.getElementById('exPanelA');
+const exPanelABody = document.getElementById('exPanelABody');
+const exResultsDiv = document.getElementById('exResults');
+const exTopicSelector = document.getElementById('exTopicSelector');
+const exVoiceWarning = document.getElementById('exVoiceWarning');
+
+function exSetToolbar(state) {
+  exBtnReveal.classList.toggle('disabled', state !== 'thinking' && state !== 'speaking-q');
+  exBtnCorrect.classList.toggle('disabled', state !== 'assessing');
+  exBtnPartial.classList.toggle('disabled', state !== 'assessing');
+  exBtnWrong.classList.toggle('disabled', state === 'idle');
+  exBtnThink.classList.toggle('counting', state === 'thinking');
+}
+
+// Enter exam mode
+document.getElementById('btnExamMode').addEventListener('click', () => {
+  studyContent.classList.add('hidden');
+  topBar.style.display = 'none';
+  examView.classList.add('active');
+});
+
+// Back to study
+function backToStudy() {
+  if (exRunning) exStopSession();
+  examView.classList.remove('active');
+  exResultsDiv.classList.remove('active');
+  exTopicSelector.style.display = '';
+  studyContent.classList.remove('hidden');
+  topBar.style.display = '';
+}
+
+exBtnHome.addEventListener('click', backToStudy);
+document.getElementById('exBtnBackResults').addEventListener('click', backToStudy);
+
+// Panel toggle
+document.getElementById('exPanelQHeader').addEventListener('click', () => exPanelQ.classList.toggle('collapsed'));
+document.getElementById('exPanelAHeader').addEventListener('click', () => exPanelA.classList.toggle('collapsed'));
+
+// Mute
+exBtnMute.addEventListener('click', (e) => {
+  e.stopPropagation();
+  exMuted = !exMuted;
+  exBtnMute.classList.toggle('muted', exMuted);
+  exMuteIcon.innerHTML = exMuted
+    ? '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'
+    : '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+  if (exMuted) speechSynthesis.cancel();
+});
+
+// Timer
+exBtnThink.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (exCountingDown) {
+    exCountdownRem = Math.min(exCountdownRem + 5, 30);
+    exThinkLabel.textContent = exCountdownRem;
+  } else {
+    exThinkIdx = (exThinkIdx + 1) % exThinkCycle.length;
+    exThinkLabel.textContent = exThinkCycle[exThinkIdx];
+  }
+});
+
+// Reveal
+exBtnReveal.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (exBtnReveal.classList.contains('disabled')) return;
+  exRevealed = true;
+  speechSynthesis.cancel();
+  if (exThinkTimer) { clearInterval(exThinkTimer); exThinkTimer = null; exCountingDown = false; }
+  if (exRevealResolve) { exRevealResolve(); exRevealResolve = null; }
+});
+
+// Assessment: correct and partial
+[exBtnCorrect, exBtnPartial].forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (btn.classList.contains('disabled')) return;
+    if (exAssessResolve) { exAssessResolve(btn.dataset.score); exAssessResolve = null; }
+  });
+});
+
+// Wrong = skip+wrong
+exBtnWrong.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (exBtnWrong.classList.contains('disabled')) return;
+  if (exAssessResolve) {
+    exAssessResolve('wrong');
+    exAssessResolve = null;
+  } else {
+    exRevealed = true;
+    speechSynthesis.cancel();
+    if (exThinkTimer) { clearInterval(exThinkTimer); exThinkTimer = null; exCountingDown = false; }
+    exResults.push({ question: exQuestions[exIndex], score: 'wrong' });
+    exUpdateScore();
+    if (exRevealResolve) { exRevealResolve(); exRevealResolve = null; }
+  }
+});
+
+// Topic buttons
+document.querySelectorAll('.exam-topic-btn').forEach(btn => {
+  btn.addEventListener('click', () => btn.classList.toggle('active'));
+});
+
+// Voice
+let exVoices = [];
+let exAlvaroVoice = null;
+function exLoadVoices() {
+  exVoices = speechSynthesis.getVoices();
+  exAlvaroVoice = exVoices.find(v => v.name.includes('Alvaro') && v.name.includes('Online'));
+  if (!exAlvaroVoice) exAlvaroVoice = exVoices.find(v => v.name.includes('Alvaro'));
+  if (!exAlvaroVoice) exAlvaroVoice = exVoices.find(v => v.lang.startsWith('es'));
+  if (!exAlvaroVoice) exVoiceWarning.classList.add('active');
+  else exVoiceWarning.classList.remove('active');
+}
+speechSynthesis.onvoiceschanged = exLoadVoices;
+exLoadVoices();
+
+function exSpeak(text) {
+  return new Promise((resolve) => {
+    if (exMuted) { resolve(); return; }
+    speechSynthesis.cancel();
+    exRevealResolve = resolve;
+    const u = new SpeechSynthesisUtterance(text);
+    if (exAlvaroVoice) u.voice = exAlvaroVoice;
+    u.rate = 1; u.pitch = 1; u.lang = 'es-ES';
+    const ka = setInterval(() => { if (speechSynthesis.paused) speechSynthesis.resume(); }, 3000);
+    u.onend = () => { clearInterval(ka); exRevealResolve = null; resolve(); };
+    u.onerror = () => { clearInterval(ka); exRevealResolve = null; resolve(); };
+    speechSynthesis.speak(u);
+  });
+}
+
+function exFormat(text) {
+  const parts = text.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+[\s\w]*:)/);
+  if (parts.length > 1) {
+    const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return '<ul>' + parts.map(p => `<li>${esc(p.trim())}</li>`).join('') + '</ul>';
+  }
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+}
+
+function exCountdown(seconds) {
+  return new Promise((resolve) => {
+    exCountdownRem = seconds;
+    exCountingDown = true;
+    exSetToolbar('thinking');
+    exThinkLabel.textContent = exCountdownRem;
+    exRevealResolve = resolve;
+    exThinkTimer = setInterval(() => {
+      exCountdownRem--;
+      exThinkLabel.textContent = exCountdownRem;
+      if (exCountdownRem <= 0) {
+        clearInterval(exThinkTimer);
+        exThinkTimer = null;
+        exCountingDown = false;
+        exThinkLabel.textContent = exThinkCycle[exThinkIdx];
+        exRevealResolve = null;
+        resolve();
+      }
+    }, 1000);
+  });
+}
+
+function exCalcScore() {
+  let pts = 0;
+  exResults.forEach(r => { if (r.score === 'correct') pts += 1; else if (r.score === 'partial') pts += 0.5; });
+  return pts;
+}
+
+function exUpdateScore() {
+  const pts = exCalcScore();
+  const total = exQuestions.length;
+  const nota = total > 0 ? ((pts / total) * 10).toFixed(1) : '0';
+  document.getElementById('exLiveScore').textContent = nota.replace('.0', '') + ' / 10';
+}
+
+function exUpdateProgress() {
+  const total = exQuestions.length;
+  exProgressText.textContent = `Pregunta ${exIndex + 1} de ${total}`;
+  exProgressFill.style.width = ((exIndex / total) * 100) + '%';
+}
+
+function exShowQuestion(q) {
+  exSectionLabel.textContent = q.section;
+  exPanelQ.classList.remove('collapsed');
+  exPanelQ.style.display = '';
+  exPanelQBody.innerHTML = exFormat(q.question);
+  exPanelA.style.display = 'none';
+  exPanelA.classList.add('collapsed');
+  exPanelABody.innerHTML = '';
+}
+
+function exShowAnswer(q) {
+  exPanelA.style.display = '';
+  exPanelA.classList.remove('collapsed');
+  exPanelABody.innerHTML = exFormat(q.answer);
+  exPanelQ.classList.add('collapsed');
+}
+
+async function exRunQuestion(q) {
+  if (!exRunning) return;
+  exUpdateProgress();
+  exRevealed = false;
+
+  exShowQuestion(q);
+  exSetToolbar('speaking-q');
+  await exSpeak(q.question);
+  if (!exRunning) return;
+
+  if (!exRevealed) {
+    await exCountdown(exThinkCycle[exThinkIdx]);
+    exCountingDown = false;
+    exThinkLabel.textContent = exThinkCycle[exThinkIdx];
+    if (!exRunning) return;
+  }
+
+  const skipped = exResults.some(r => r.question === q);
+  if (skipped) { exRevealed = false; return; }
+
+  exShowAnswer(q);
+  exRevealed = false;
+  exSetToolbar('speaking-q');
+  await exSpeak(q.answer);
+  if (!exRunning) return;
+
+  if (exResults.some(r => r.question === q)) return;
+
+  exSetToolbar('assessing');
+  const score = await new Promise(resolve => { exAssessResolve = resolve; });
+  exSetToolbar('idle');
+  if (!exRunning) return;
+  exResults.push({ question: q, score });
+  exUpdateScore();
+
+  await new Promise(r => setTimeout(r, 500));
+}
+
+function exShowResults() {
+  exSession.classList.remove('active');
+  exResultsDiv.classList.add('active');
+  exTopicSelector.style.display = 'none';
+
+  const total = exResults.length;
+  const correct = exResults.filter(r => r.score === 'correct').length;
+  const partial = exResults.filter(r => r.score === 'partial').length;
+  const wrong = exResults.filter(r => r.score === 'wrong').length;
+
+  document.getElementById('exBarCorrect').style.width = ((correct / total) * 100) + '%';
+  document.getElementById('exBarPartial').style.width = ((partial / total) * 100) + '%';
+  document.getElementById('exBarWrong').style.width = ((wrong / total) * 100) + '%';
+  document.getElementById('exPctCorrect').textContent = Math.round((correct / total) * 100) + '%';
+  document.getElementById('exPctPartial').textContent = Math.round((partial / total) * 100) + '%';
+  document.getElementById('exPctWrong').textContent = Math.round((wrong / total) * 100) + '%';
+
+  const weak = exResults.filter(r => r.score !== 'correct');
+  const reviewSection = document.getElementById('exReviewSection');
+  const reviewList = document.getElementById('exReviewList');
+  const btnRetryWeak = document.getElementById('exBtnRetryWeak');
+  reviewList.innerHTML = '';
+
+  if (weak.length > 0) {
+    reviewSection.style.display = 'block';
+    btnRetryWeak.style.display = 'inline-block';
+    weak.forEach(r => {
+      const li = document.createElement('li');
+      li.className = 'ex-review-item ' + r.score;
+      li.innerHTML = `
+        <div class="ex-review-item-section">${r.question.section}</div>
+        <div class="ex-review-item-q">${r.question.question}</div>
+        <div class="ex-review-item-a">${r.question.answer}</div>
+      `;
+      reviewList.appendChild(li);
+    });
+  } else {
+    reviewSection.style.display = 'none';
+    btnRetryWeak.style.display = 'none';
+  }
+}
+
+async function exStartSession(questionsOverride) {
+  const topics = Array.from(document.querySelectorAll('.exam-topic-btn.active')).map(b => b.dataset.topic);
+  if (!questionsOverride && topics.length === 0) {
+    alert('Selecciona al menos un tema.');
+    return;
+  }
+
+  exQuestions = questionsOverride || QUESTIONS.filter(q => topics.includes(q.topic));
+  for (let i = exQuestions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [exQuestions[i], exQuestions[j]] = [exQuestions[j], exQuestions[i]];
+  }
+
+  exIndex = 0;
+  exResults = [];
+  exUpdateScore();
+  exRunning = true;
+  exSession.classList.add('active');
+  exResultsDiv.classList.remove('active');
+  exTopicSelector.style.display = 'none';
+  exBtnStart.style.display = 'none';
+
+  for (exIndex = 0; exIndex < exQuestions.length; exIndex++) {
+    if (!exRunning) break;
+    await exRunQuestion(exQuestions[exIndex]);
+  }
+
+  if (exRunning) {
+    exRunning = false;
+    exProgressFill.style.width = '100%';
+    exShowResults();
+  }
+  exBtnStart.style.display = '';
+}
+
+function exCleanup() {
+  if (exThinkTimer) { clearInterval(exThinkTimer); exThinkTimer = null; }
+  exCountingDown = false;
+  exBtnThink.classList.remove('counting');
+  exThinkLabel.textContent = exThinkCycle[exThinkIdx];
+  exRevealResolve = null;
+}
+
+function exStopSession() {
+  exRunning = false;
+  speechSynthesis.cancel();
+  exCleanup();
+  exAssessResolve = null;
+  exSetToolbar('idle');
+  exSession.classList.remove('active');
+  exTopicSelector.style.display = '';
+  exBtnStart.style.display = '';
+}
+
+exBtnStart.addEventListener('click', () => exStartSession());
+
+document.getElementById('exBtnRetry').addEventListener('click', () => {
+  exResultsDiv.classList.remove('active');
+  exTopicSelector.style.display = '';
+  exBtnStart.style.display = '';
+});
+document.getElementById('exBtnRetryWeak').addEventListener('click', () => {
+  const weak = exResults.filter(r => r.score !== 'correct').map(r => r.question);
+  exResultsDiv.classList.remove('active');
+  exStartSession(weak);
+});
+// Card TTS — read aloud per section
+let cardSpeakingBtn = null;
+document.querySelectorAll('.card-speak').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (cardSpeakingBtn === btn) {
+      speechSynthesis.cancel();
+      btn.classList.remove('speaking');
+      cardSpeakingBtn = null;
+      return;
+    }
+    if (cardSpeakingBtn) {
+      speechSynthesis.cancel();
+      cardSpeakingBtn.classList.remove('speaking');
+    }
+    const card = btn.closest('.card');
+    const title = card.querySelector('h3').innerText;
+    const bodyEl = card.querySelector('.card-body');
+    let text = title + '. ';
+    bodyEl.childNodes.forEach(node => {
+      if (node.nodeType === 3) { text += node.textContent; return; }
+      if (!(node instanceof Element)) return;
+      const tables = node.querySelectorAll('table.study-table');
+      if (tables.length === 0) { text += node.innerText + ' '; return; }
+      const clone = node.cloneNode(true);
+      clone.querySelectorAll('table.study-table').forEach(t => t.remove());
+      const before = clone.innerText.trim();
+      if (before) text += before + ' ';
+      tables.forEach(tbl => {
+        const ths = [...tbl.querySelectorAll('tr:first-child th')].map(th => th.innerText.trim());
+        tbl.querySelectorAll('tr').forEach((tr, i) => {
+          if (i === 0) return;
+          const cells = tr.querySelectorAll('td');
+          cells.forEach((td, j) => {
+            if (ths[j]) text += ths[j] + ': ' + td.innerText.trim() + '. ';
+            else text += td.innerText.trim() + '. ';
+          });
+        });
+      });
+    });
+    btn.classList.add('speaking');
+    cardSpeakingBtn = btn;
+    const u = new SpeechSynthesisUtterance(text);
+    if (exAlvaroVoice) u.voice = exAlvaroVoice;
+    u.rate = 1; u.pitch = 1; u.lang = 'es-ES';
+    const ka = setInterval(() => { if (speechSynthesis.paused) speechSynthesis.resume(); }, 3000);
+    u.onend = () => { clearInterval(ka); btn.classList.remove('speaking'); cardSpeakingBtn = null; };
+    u.onerror = () => { clearInterval(ka); btn.classList.remove('speaking'); cardSpeakingBtn = null; };
+    speechSynthesis.speak(u);
+  });
+});
+
+// Dark mode
+const btnTheme = document.getElementById('btnThemeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const sunPath = 'M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z';
+const moonPath = 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z';
+
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark');
+  themeIcon.innerHTML = '<path d="' + sunPath + '"/>';
+}
+btnTheme.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode', isDark);
+  themeIcon.innerHTML = '<path d="' + (isDark ? sunPath : moonPath) + '"/>';
+});
+
+// Back to top
+const btnTop = document.getElementById('btnTop');
+window.addEventListener('scroll', () => {
+  btnTop.classList.toggle('visible', window.scrollY > 300);
+});
+btnTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+})();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
 
 </body>
 </html>
